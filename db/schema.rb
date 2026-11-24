@@ -10,9 +10,38 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_23_012551) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_23_065454) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "messages", force: :cascade do |t|
+    t.string "role"
+    t.text "content"
+    t.bigint "visit_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["visit_id"], name: "index_messages_on_visit_id"
+  end
+
+  create_table "phrases", force: :cascade do |t|
+    t.string "english"
+    t.string "japanese"
+    t.string "romaji"
+    t.bigint "visit_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["visit_id"], name: "index_phrases_on_visit_id"
+  end
+
+  create_table "places", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.float "lat"
+    t.float "long"
+    t.integer "minimum_level"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -22,7 +51,25 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_23_012551) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "level"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
+
+  create_table "visits", force: :cascade do |t|
+    t.integer "self_rating", default: 0
+    t.integer "status", default: 0
+    t.jsonb "prep", default: {}
+    t.bigint "user_id", null: false
+    t.bigint "place_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["place_id"], name: "index_visits_on_place_id"
+    t.index ["user_id"], name: "index_visits_on_user_id"
+  end
+
+  add_foreign_key "messages", "visits"
+  add_foreign_key "phrases", "visits"
+  add_foreign_key "visits", "places"
+  add_foreign_key "visits", "users"
 end
