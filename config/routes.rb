@@ -6,7 +6,7 @@ Rails.application.routes.draw do
     resources :visits, only: [:create]
   end
 
-  resources :visits, only: [:show, update] do
+  resources :visits, only: [:show, :update] do
     resources :messages, only: [:create]
     member do
       get :review
