@@ -12,8 +12,8 @@ export default class extends Controller {
     const userLat = parseFloat(urlParams.get('user_lat'));
     const userLng = parseFloat(urlParams.get('user_lng'));
 
-    const initialLat = userLat || 0;
-    const initialLng = userLng || 0;
+    const initialLat = userLat || 35.681;
+    const initialLng = userLng || 139.767;
     const map = new GMaps({ el: '#map', lat: initialLat, lng: initialLng });
 
     const markers = this.markersValue;
