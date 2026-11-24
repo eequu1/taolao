@@ -25,7 +25,7 @@ export default class extends Controller {
       map.addMarker({
         lat: userLat,
         lng: userLng,
-        title: "Vị trí của bạn"
+        title: "Your location"
       });
     }
 
