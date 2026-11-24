@@ -1,0 +1,25 @@
+<div class="container">
+  <div class="backdrop">
+    <%= image_tag @place.image_url, alt: @place.name, class: "place-image" %>
+    <div class="info">
+      <h3> <%= @place.name %></h3>
+      <h4> <%= @place.description %></h4>
+      <h5> Minimum Level:<%= @place.minimum_level %></h4>
+    </div>
+  </div>
+  <h2>Your Reply</h2>
+  <div class="key-phrase">
+    <% @place.phrases.each do |phrase|%>
+      <div class="card">
+        <div class="phrase-text">
+          <div class="japanese"> <%= phrase.japanese %></div>
+          <div class="romaji"><%= phrase.romaji %></div>
+          <div class="english"><%= phrase.english %></div>
+        </div>
+        <div class="play-btn">
+          <i class="fa-regular fa-circle-play"></i>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
