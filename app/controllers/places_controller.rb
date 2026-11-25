@@ -21,4 +21,9 @@ class PlacesController < ApplicationController
 
   def create
   end
+
+  def speak
+    @audio_binary = GeminiTtsService.synthesize(params[:text])
+    send_data @audio_binary, type: "audio/wav", disposition: "inline"
+  end
 end
