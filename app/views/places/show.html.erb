@@ -1,0 +1,28 @@
+<div class="container">
+  <div class="backdrop">
+    <%= image_tag @place.image_url, alt: @place.name, class: "place-image" %>
+    <div class="info">
+      <div class="text-center">
+        <h4> <%= @place.name %></h4>
+        <p> <%= @place.description %></p>
+      </div>
+      <span class="badge rounded-pill text-bg-warning"> Minimum Level:<%= @place.minimum_level %></span>
+    </div>
+  </div>
+  <h2>Your Reply</h2>
+  <div class="key-phrase">
+    <% @place.phrases.each do |phrase|%>
+      <div class="phrase-card">
+        <div class="phrase-text">
+          <div class="japanese"> <%= phrase.japanese %></div>
+          <div class="romaji"><%= phrase.romaji %></div>
+          <div class="english"><%= phrase.english %></div>
+        </div>
+        <div class="play-btn">
+          <i class="fa-regular fa-circle-play"></i>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <%= link_to "Prepare with AI", place_visits_path(@place), class:"btn btn-primary my-2 mb-4" %>
+</div>
