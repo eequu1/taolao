@@ -3,6 +3,9 @@ Rails.application.routes.draw do
   root to: "pages#home"
 
   resources :places, only: [:index, :show] do
+    member do
+      post :speak
+    end
     resources :visits, only: [:create]
   end
 
@@ -12,5 +15,7 @@ Rails.application.routes.draw do
       get :review
     end
   end
+
+
 
 end

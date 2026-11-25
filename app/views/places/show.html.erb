@@ -18,7 +18,14 @@
           <div class="romaji"><%= phrase.romaji %></div>
           <div class="english"><%= phrase.english %></div>
         </div>
-        <div class="play-btn">
+        <div
+              class="play-btn"
+              data-controller="tts"
+              data-tts-text-value="<%= phrase.japanese %>"
+              data-tts-url-value="<%= speak_place_path(@place) %>"
+              data-action="click->tts#play"
+          style="cursor: pointer;"
+          >
           <i class="fa-regular fa-circle-play"></i>
         </div>
       </div>
