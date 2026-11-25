@@ -1,0 +1,42 @@
+// Post-visit review form and summary (visits#review, visits#show)
+
+.review {
+  // Tappable phrase cards: the hidden checkbox sits right before its label
+  .phrase-choice {
+    cursor: pointer;
+    width: 100%;
+
+    .check-icon {
+      font-size: 28px;
+      color: $light-gray;
+      flex-shrink: 0;
+    }
+  }
+
+  .btn-check:checked + .phrase-choice {
+    background-color: lighten($yellow, 20%);
+
+    .check-icon {
+      color: $orange;
+    }
+  }
+
+  .btn-check:focus-visible + .phrase-choice {
+    outline: 3px solid $blue;
+  }
+}
+
+.visit-summary {
+  .xp-card {
+    border: 3px solid $orange;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .xp-earned {
+    font-size: 40px;
+    font-weight: bold;
+    color: $orange;
+  }
+}
