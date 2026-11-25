@@ -12,25 +12,29 @@ puts "Creating users..."
 user_annie = User.create!(
   email: "annie@rails.com",
   password: "123123",
-  level: 3
+  level: 12,
+  experience: User.experience_for_level(12)
 )
 
 user_paul = User.create!(
   email: "paul@rails.com",
   password: "123123",
-  level: 2
+  level: 6,
+  experience: User.experience_for_level(6)
 )
 
 user_jon = User.create!(
   email: "jon@rails.com",
   password: "123123",
-  level: 2
+  level: 8,
+  experience: User.experience_for_level(8)
 )
 
 user_yoshi = User.create!(
   email: "yoshi@rails.com",
   password: "123123",
-  level: 2
+  level: 15,
+  experience: User.experience_for_level(15)
 )
 
 puts "Created #{User.count} user(s)."
@@ -44,7 +48,7 @@ place_glitch = Place.create!(
   description: "Specialty coffee shop in Jimbocho famous for light-roast single-origin pour-over",
   lat: 35.6955,
   long: 139.7570,
-  minimum_level: 2,
+  minimum_level: 15,
   image_url: "https://coffeeryokou.com/wp-content/uploads/2022/01/glitch-exterior.jpg"
 )
 
@@ -53,7 +57,7 @@ place_blue_bottle = Place.create!(
   description: "Popular California-born specialty coffee chain with stylish space in Aoyama",
   lat: 35.6653,
   long: 139.7139,
-  minimum_level: 2,
+  minimum_level: 8,
   image_url: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/12/a7/ac/2e/blue-bottle-coffee-aoyama.jpg"
 )
 
@@ -62,7 +66,7 @@ place_fuglen = Place.create!(
   description: "Norwegian-style specialty coffee shop and cocktail bar in Tomigaya",
   lat: 35.6666,
   long: 139.6924,
-  minimum_level: 2,
+  minimum_level: 12,
   image_url: "https://deeptokyo.jp/wp-content/uploads/2025/09/PC_IMG_4870-scaled.jpg"
 )
 
@@ -72,7 +76,7 @@ place_ichiran = Place.create!(
   description: "Famous individual booth tonkotsu ramen restaurant, open 24 hours",
   lat: 35.6611,
   long: 139.7010,
-  minimum_level: 2,
+  minimum_level: 5,
   image_url: "https://tfp-group.co.jp/japan-spot-guide/assets/tokyo/shibuya/ichiran-ramen.jpg"
 )
 
@@ -81,7 +85,7 @@ place_afuri = Place.create!(
   description: "Popular modern ramen shop known for yuzu-salt ramen",
   lat: 35.6467,
   long: 139.7102,
-  minimum_level: 3,
+  minimum_level: 10,
   image_url: "https://static.wixstatic.com/media/1815be_847f9ba702894ea0ba10133711c107bd~mv2.jpg/v1/fill/w_980,h_735,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/1815be_847f9ba702894ea0ba10133711c107bd~mv2.jpg"
 )
 
@@ -100,7 +104,7 @@ place_lawson = Place.create!(
   description: "Lawson convenience store in the heart of Shibuya, open 24 hours",
   lat: 35.6598,
   long: 139.7008,
-  minimum_level: 1,
+  minimum_level: 2,
   image_url: "https://www.planmyjapan.com/wp-content/uploads/2024/05/lawson-1-1148x800.jpg"
 )
 
@@ -286,4 +290,17 @@ Phrase.create!(
 )
 
 puts "Created #{Phrase.count} phrase(s)."
+
+# ===== Reviews =====
+# Completed visits were already reviewed: mark their phrases used and record
+# the XP they granted, so they can't be reviewed (and rewarded) again.
+# Users' experience was set above, so no XP is added here.
+puts "Adding review data to completed visits..."
+Visit.completed.find_each do |visit|
+  visit.phrases.update_all(used: true)
+  visit.confidence = 4
+  visit.experience_awarded = visit.visit_experience + visit.phrase_experience(visit.phrases.count)
+  visit.save!
+end
+
 puts "Done!"
