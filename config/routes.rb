@@ -3,6 +3,9 @@ Rails.application.routes.draw do
   root to: "pages#home"
 
   resources :places, only: [:index, :show] do
+    member do
+      post :speak
+    end
     resources :visits, only: [:create]
   end
 
@@ -15,5 +18,7 @@ Rails.application.routes.draw do
       get :phrase_suggestions # lazy-loaded into the review page
     end
   end
+
+
 
 end
