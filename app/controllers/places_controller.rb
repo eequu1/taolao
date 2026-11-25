@@ -25,6 +25,11 @@ class PlacesController < ApplicationController
   def create
   end
 
+  def speak
+    @audio_binary = GeminiTtsService.synthesize(params[:text])
+    send_data @audio_binary, type: "audio/wav", disposition: "inline"
+  end
+
   private
 
   def search_coordinates
@@ -33,8 +38,5 @@ class PlacesController < ApplicationController
     elsif params[:user_lat].present? && params[:user_lng].present?
       [params[:user_lat].to_f, params[:user_lng].to_f]
     end
-  def speak
-    @audio_binary = GeminiTtsService.synthesize(params[:text])
-    send_data @audio_binary, type: "audio/wav", disposition: "inline"
   end
 end
