@@ -18,28 +18,6 @@ class PlacesController < ApplicationController
     end
   end
 
-  # redirect_to places_path, notice: "No places found" if @places.empty?
-
-  # def index
-  #   if params[:query]
-  #     @places = Place.where.not(lat: nil, long: nil)
-  #     @places = @places.near(params[:query], 5, units: :km)
-  #   else
-  #     @places = Place.where.not(lat: nil, long: nil)
-  #     if params[:user_lat].present? && params[:user_lng].present?
-  #       @places = @places.near([params[:user_lat].to_f, params[:user_lng].to_f], 5, units: :km)
-  #     end
-  #   end
-
-  #   @markers = @places.map do |place|
-  #     {
-  #       lat: place.lat,
-  #       lng: place.long,
-  #       info_window_html: render_to_string(partial: "places/map_box", locals: { place: place })
-  #     }
-  #   end
-  # end
-
   def show
     @place = Place.find(params[:id])
   end
@@ -55,5 +33,8 @@ class PlacesController < ApplicationController
     elsif params[:user_lat].present? && params[:user_lng].present?
       [params[:user_lat].to_f, params[:user_lng].to_f]
     end
+  def speak
+    @audio_binary = GeminiTtsService.synthesize(params[:text])
+    send_data @audio_binary, type: "audio/wav", disposition: "inline"
   end
 end
