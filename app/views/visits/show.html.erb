@@ -48,6 +48,18 @@
       <% end %>
     <% end %>
 
+    <section id="heard" class="heard-section my-4">
+      <h4>Anything you heard but didn't understand?</h4>
+      <% heard = @visit.phrases.where(source: [:heard, :manual]).order(:created_at) %>
+      <div id="heard-phrases">
+        <% if heard.none? %>
+          <p id="no-heard-phrases" class="text-muted">Nothing added yet.</p>
+        <% end %>
+        <%= render partial: "phrases/phrase", collection: heard, as: :phrase %>
+      </div>
+      <%= render "phrases/form", visit: @visit, phrase: Phrase.new %>
+    </section>
+
     <%= link_to "Find another place", places_path, class: "btn btn-warning w-100 my-3" %>
   <% else %>
     <p>Been there already? Tell us how it went to earn XP.</p>

@@ -1,0 +1,9 @@
+<% if @phrase.persisted? %>
+  <%= turbo_stream.append "heard-phrases", partial: "phrases/phrase", locals: { phrase: @phrase } %>
+  <%= turbo_stream.remove "no-heard-phrases" %>
+  <%= turbo_stream.replace "manual-phrase-form", partial: "phrases/form",
+                                                 locals: { visit: @visit, phrase: Phrase.new } %>
+<% else %>
+  <%= turbo_stream.replace "manual-phrase-form", partial: "phrases/form",
+                                                 locals: { visit: @visit, phrase: @phrase } %>
+<% end %>

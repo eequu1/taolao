@@ -50,6 +50,13 @@ class VisitsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to visit_path(@visit)
   end
 
+  test "a reviewed visit's summary has the heard-phrases section and form" do
+    @visit.complete_review!(self_rating: 4, confidence: 4)
+    get visit_path(@visit)
+    assert_select "#heard h4", text: /heard but didn't understand/
+    assert_select "form#manual-phrase-form[action='#{visit_phrases_path(@visit)}']"
+  end
+
   test "an unreviewed visit's summary links to the review" do
     get visit_path(@visit)
     assert_select "a[href='#{review_visit_path(@visit)}']"

@@ -35,6 +35,18 @@ class PhraseTest < ActiveSupport::TestCase
     assert_equal 10, @user.reload.experience
   end
 
+  test "a phrase needs at least one of japanese, romaji or english" do
+    phrase = visits(:cafe_ready).phrases.new(source: :manual)
+    assert_not phrase.valid?
+    phrase.romaji = "Pointo kaado"
+    assert phrase.valid?
+  end
+
+  test "phrase fields are limited to 200 characters" do
+    phrase = visits(:cafe_ready).phrases.new(source: :manual, english: "a" * 201)
+    assert_not phrase.valid?
+  end
+
   test "the same Japanese text pays only once per user" do
     phrases(:konbini_hot).memorize!
     duplicate = phrases(:cafe_hot)

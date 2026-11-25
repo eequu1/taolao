@@ -8,6 +8,7 @@ Rails.application.routes.draw do
 
   resources :visits, only: [:show, :update] do
     resources :messages, only: [:create]
+    resources :phrases, only: [:create] # phrases heard on the visit, added after the review
     member do
       get :review
     end

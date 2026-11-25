@@ -10,6 +10,8 @@ class Phrase < ApplicationRecord
   # Memorizing is in-app, so it only counts for phrases met in the real world:
   # ones the user said on a visit, or heard staff say.
   validate :met_in_real_life, if: :memorized?
+  validate :requires_some_text
+  validates :japanese, :romaji, :english, length: { maximum: 200 }
 
   def memorizable?
     used? || heard?
@@ -35,6 +37,13 @@ class Phrase < ApplicationRecord
   end
 
   private
+
+  # Someone who half-heard a phrase may only manage the romaji or a guess at the English
+  def requires_some_text
+    return if [japanese, romaji, english].any?(&:present?)
+
+    errors.add(:base, "Please enter the phrase in Japanese, romaji or English")
+  end
 
   def met_in_real_life
     errors.add(:status, "can only be memorized after using or hearing the phrase on a visit") unless memorizable?
