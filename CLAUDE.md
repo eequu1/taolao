@@ -32,4 +32,12 @@ Requires a local PostgreSQL (`taolao_development` / `taolao_test`).
 - **Maps / geolocation flow**: `places#index` → `app/javascript/controllers/google_maps_controller.js` (Stimulus, uses the `gmaps` importmap pin). On connect it asks the browser for geolocation and reloads the page with `?user_lat=&user_lng=`; the controller then filters places with Geocoder's `.near(..., 5, units: :km)` and passes markers (with `info_window_html` rendered from `places/_map_box`) via a `data-google-maps-markers-value` attribute. Default center is Tokyo Station.
 - **Google APIs**: two env vars loaded via dotenv from `.env` — `API_KEY` (server-side Geocoder lookups, `config/initializers/geocoder.rb`) and `GOOGLE_API_BROWSER_KEY` (Maps JS script tag in `layouts/application.html.erb`).
 - **Frontend**: importmap (no Node/bundler), Turbo + Stimulus, Bootstrap 5 + Font Awesome via Sprockets/SassC. Styles are organized as `app/assets/stylesheets/{config,components,pages}/` with `_index.scss` files that must import each new partial. Forms use SimpleForm (Bootstrap config).
+- **XP / levelling**: XP is earned only from real-world activity, never in-app practice. Rules and constants live in `User` (level curve, cap 100), `Visit#complete_review!` (visit + used-phrase XP) and `Phrase#memorize!` (memorize bonus, only for phrases used or heard on a visit, paid once).
 - **Infra**: Solid Cache/Queue/Cable (DB-backed), Kamal deploy config in `config/deploy.yml`.
+
+## Ruby 3.3.5 constraint
+
+Ruby is pinned at 3.3.5 and can't be upgraded, but it is affected by the Nov 2026 Regexp/String advisory (heap overflows in string case conversion and in regexp compilation/matching with attacker-controlled patterns). The Brakeman warning is accepted in `config/brakeman.ignore`. In new code:
+- Never call `downcase`/`upcase`/`capitalize`/`swapcase`/`casecmp`/`parameterize` etc. on user-supplied or LLM-generated text (phrases, messages, params). Compare text exactly.
+- Never build a Regexp from user or LLM input (`Regexp.new`, `/#{...}/`), and don't call `Regexp#to_s` on such patterns.
+- `ApplicationController#reject_non_ascii_email` keeps non-ASCII emails away from Devise's email downcasing; keep it in place.

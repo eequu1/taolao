@@ -1,0 +1,22 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "Remote Code Execution",
+      "warning_code": 130,
+      "fingerprint": "b2ef9ca037e09c20a8a7b7aec14bd62b16fb830e3723adf3b6936529ed347bde",
+      "check_name": "Ruby2Shell",
+      "message": "Ruby 3.3.5 has a critical remote code execution vulnerability (CVE-2026-132825). Upgrade to Ruby 3.3.14 or later",
+      "file": ".ruby-version",
+      "line": 1,
+      "link": "https://www.ruby-lang.org/en/news/2026/11/18/multiple-vulnerabilities-in-regexp-and-string/",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [122, 125, 787],
+      "note": "ACCEPTED RISK, NOT FIXED. Ruby can't be upgraded for this project (decided 2026-11-25). The advisory's bugs are in String case conversion and in Regexp compile/match/to_s with attacker-controlled patterns, and it gives no workaround. Mitigations: ApplicationController#reject_non_ascii_email rejects non-ASCII emails before Devise downcases them; project rule (CLAUDE.md) bans case-converting user/LLM text and building Regexps from it. Remove this entry when Ruby is upgraded to 3.3.14+."
+    }
+  ],
+  "brakeman_version": "8.1.1"
+}
