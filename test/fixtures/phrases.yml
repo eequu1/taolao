@@ -1,0 +1,35 @@
+<% 6.times do |i| %>
+konbini_phrase_<%= i %>:
+  visit: konbini_ready
+  english: Phrase <%= i %>
+  japanese: フレーズ<%= i %>
+  romaji: Fureezu <%= i %>
+<% end %>
+
+cafe_hot:
+  visit: cafe_ready
+  english: Hot, please
+  japanese: ホットでお願いします
+  romaji: Hotto de onegaishimasu
+
+# Same Japanese as cafe_hot, on a different visit (duplicate check)
+konbini_hot:
+  visit: konbini_ready
+  english: Hot, please
+  japanese: ホットでお願いします
+  romaji: Hotto de onegaishimasu
+  used: true
+
+heard_phrase:
+  visit: cafe_ready
+  english: Would you like a bag?
+  japanese: 袋はご利用ですか？
+  romaji: Fukuro wa goriyou desu ka?
+  source: heard
+
+manual_phrase:
+  visit: cafe_ready
+  english: Is this seat free?
+  japanese: この席空いていますか？
+  romaji: Kono seki aite imasu ka?
+  source: manual

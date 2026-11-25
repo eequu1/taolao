@@ -1,0 +1,15 @@
+# Prepped and ready to be reviewed after going out
+konbini_ready:
+  user: traveller
+  place: konbini
+  status: ready
+
+cafe_ready:
+  user: traveller
+  place: cafe
+  status: ready
+
+other_users_visit:
+  user: other_traveller
+  place: konbini
+  status: ready

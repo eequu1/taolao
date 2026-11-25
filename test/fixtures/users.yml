@@ -1,0 +1,11 @@
+traveller:
+  email: traveller@example.com
+  encrypted_password: <%= Devise::Encryptor.digest(User, "password") %>
+  level: 1
+  experience: 0
+
+other_traveller:
+  email: other@example.com
+  encrypted_password: <%= Devise::Encryptor.digest(User, "password") %>
+  level: 1
+  experience: 0

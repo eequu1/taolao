@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_24_054806) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_25_025622) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -30,6 +30,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_24_054806) do
     t.bigint "visit_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "used", default: false, null: false
+    t.integer "source", default: 0, null: false
+    t.integer "status", default: 0, null: false
+    t.datetime "memorized_at"
     t.index ["visit_id"], name: "index_phrases_on_visit_id"
   end
 
@@ -52,7 +56,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_24_054806) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "level"
+    t.integer "level", default: 1, null: false
+    t.integer "experience", default: 0, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -65,6 +70,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_24_054806) do
     t.bigint "place_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "confidence"
+    t.integer "experience_awarded"
     t.index ["place_id"], name: "index_visits_on_place_id"
     t.index ["user_id"], name: "index_visits_on_user_id"
   end
