@@ -1,0 +1,4 @@
+<%# One chat bubble. Locals: message %>
+<%= tag.div id: dom_id(message), class: ["chat-bubble", message.role == "user" ? "from-user" : "from-assistant"] do %>
+  <%= simple_format(message.content) %>
+<% end %>

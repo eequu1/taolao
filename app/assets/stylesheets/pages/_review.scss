@@ -26,6 +26,8 @@
   }
 }
 
+// XP card: on both the review page and the visit summary
+.review,
 .visit-summary {
   .xp-card {
     border: 3px solid $orange;
@@ -38,5 +40,43 @@
     font-size: 40px;
     font-weight: bold;
     color: $orange;
+  }
+}
+
+// Suggested staff phrases and the "what did you hear?" chat on the review page
+.review {
+  .suggestion .added {
+    font-weight: bold;
+  }
+
+  .chat-messages {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .chat-bubble {
+    max-width: 85%;
+    padding: 10px 14px;
+    border-radius: 16px;
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+
+    &.from-user {
+      align-self: flex-end;
+      background-color: $orange;
+      color: white;
+    }
+
+    &.from-assistant {
+      align-self: flex-start;
+      background-color: $light-gray;
+    }
+  }
+
+  .saved-phrase {
+    align-self: stretch;
   }
 }

@@ -1,13 +1,14 @@
 class VisitsController < ApplicationController
   before_action :set_visit
 
-  # Post-visit summary: XP earned, level progress, phrases used.
+  # Post-visit summary: XP earned, level progress, phrases used and added.
   def show
   end
 
-  # "How did it go?" form, filled in after coming back from the place.
+  # The post-visit page: rating form (or the XP card once submitted),
+  # suggested staff phrases, and the "what did you hear?" chat.
   def review
-    redirect_to visit_path(@visit), notice: "You've already reviewed this visit." if @visit.reviewed?
+    @messages = @visit.messages.review.order(:id)
   end
 
   def update
@@ -17,9 +18,18 @@ class VisitsController < ApplicationController
       used_phrase_ids: used_phrase_ids
     )
     flash[:levels_gained] = levels_gained if levels_gained.positive?
-    redirect_to visit_path(@visit)
+    # Back to the review page, where the form becomes the XP card and the chat stays available
+    redirect_to review_visit_path(@visit)
   rescue ActiveRecord::RecordInvalid
+    @messages = @visit.messages.review.order(:id)
     render :review, status: :unprocessable_entity
+  end
+
+  # Turbo Frame content for the review page; slow (AI call) so it loads after the page
+  def phrase_suggestions
+    @suggestions = StaffPhraseSuggester.call(@visit.place)
+    @added = @visit.phrases.pluck(:japanese)
+    render layout: false
   end
 
   private

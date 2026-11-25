@@ -2,38 +2,33 @@
 
 <div class="container review my-4">
   <h2 class="mb-1">You went to <%= @visit.place.name %>!</h2>
-  <p class="text-muted mb-4">Every real visit earns XP, even the rough ones.</p>
 
-  <%= simple_form_for @visit, url: visit_path(@visit), method: :patch do |f| %>
-    <%= render "rating_scale", f: f, field: :self_rating, question: "How did it go?",
-                               low: "Rough", high: "Great" %>
-    <%= render "rating_scale", f: f, field: :confidence, question: "How confident did you feel?",
-                               low: "Very nervous", high: "Very confident" %>
+  <%# 1. How it went: the form, or the XP it earned once submitted %>
+  <section id="rating" class="mb-5">
+    <% if @visit.reviewed? %>
+      <%= render "xp_card", visit: @visit, user: current_user %>
+    <% else %>
+      <p class="text-muted mb-4">Every real visit earns XP, even the rough ones.</p>
+      <%= render "review_form", visit: @visit %>
+    <% end %>
+  </section>
 
-    <fieldset class="mb-4">
-      <legend class="fs-5">Which phrases did you use?</legend>
-      <%# Empty value so the key is always sent, even with nothing ticked %>
-      <%= hidden_field_tag "visit[used_phrase_ids][]", "" %>
-      <% phrases = @visit.phrases.prepped %>
-      <% if phrases.any? %>
-        <% phrases.each do |phrase| %>
-          <% checked = Array(@used_phrase_ids).include?(phrase.id) || phrase.used? %>
-          <%= check_box_tag "visit[used_phrase_ids][]", phrase.id, checked,
-                            id: "phrase_#{phrase.id}", class: "btn-check" %>
-          <label for="phrase_<%= phrase.id %>" class="phrase-card phrase-choice">
-            <div class="phrase-text">
-              <div class="japanese"><%= phrase.japanese %></div>
-              <div class="romaji"><%= phrase.romaji %></div>
-              <div class="english"><%= phrase.english %></div>
-            </div>
-            <i class="fa-solid fa-circle-check check-icon"></i>
-          </label>
-        <% end %>
-      <% else %>
-        <p class="text-muted">No phrases were prepped for this visit.</p>
-      <% end %>
-    </fieldset>
+  <%# 2. Staff phrases they may have heard (AI, loaded after the page) %>
+  <section id="suggestions" class="mb-5">
+    <h4>Did you hear any of these?</h4>
+    <p class="small text-muted">Things staff often say here. Add any you heard to your study list.</p>
+    <%= turbo_frame_tag "phrase-suggestions", src: phrase_suggestions_visit_path(@visit), loading: :lazy do %>
+      <p class="text-muted"><i class="fa-solid fa-spinner fa-spin"></i> Finding common phrases…</p>
+    <% end %>
+  </section>
 
-    <%= f.button :submit, "Save my visit", class: "btn btn-warning btn-lg w-100 mb-4" %>
-  <% end %>
+  <%# 3. Chat to work out anything else they heard %>
+  <section id="chat" class="mb-5">
+    <h4>Heard something else you didn't understand?</h4>
+    <p class="small text-muted">Describe it and we'll work out what it was together.</p>
+    <div id="chat-messages" class="chat-messages">
+      <%= render partial: "review_messages/message", collection: @messages, as: :message %>
+    </div>
+    <%= render "review_messages/form", visit: @visit %>
+  </section>
 </div>

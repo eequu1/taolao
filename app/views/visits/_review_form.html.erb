@@ -1,0 +1,33 @@
+<%# How did it go / confidence / phrases used. Locals: visit %>
+<%= simple_form_for visit, url: visit_path(visit), method: :patch do |f| %>
+  <%= render "rating_scale", f: f, field: :self_rating, question: "How did it go?",
+                             low: "Rough", high: "Great" %>
+  <%= render "rating_scale", f: f, field: :confidence, question: "How confident did you feel?",
+                             low: "Very nervous", high: "Very confident" %>
+
+  <fieldset class="mb-4">
+    <legend class="fs-5">Which phrases did you use?</legend>
+    <%# Empty value so the key is always sent, even with nothing ticked %>
+    <%= hidden_field_tag "visit[used_phrase_ids][]", "" %>
+    <% phrases = visit.phrases.prepped %>
+    <% if phrases.any? %>
+      <% phrases.each do |phrase| %>
+        <% checked = Array(@used_phrase_ids).include?(phrase.id) || phrase.used? %>
+        <%= check_box_tag "visit[used_phrase_ids][]", phrase.id, checked,
+                          id: "phrase_#{phrase.id}", class: "btn-check" %>
+        <label for="phrase_<%= phrase.id %>" class="phrase-card phrase-choice">
+          <div class="phrase-text">
+            <div class="japanese"><%= phrase.japanese %></div>
+            <div class="romaji"><%= phrase.romaji %></div>
+            <div class="english"><%= phrase.english %></div>
+          </div>
+          <i class="fa-solid fa-circle-check check-icon"></i>
+        </label>
+      <% end %>
+    <% else %>
+      <p class="text-muted">No phrases were prepped for this visit.</p>
+    <% end %>
+  </fieldset>
+
+  <%= f.button :submit, "Save my visit", class: "btn btn-warning btn-lg w-100" %>
+<% end %>

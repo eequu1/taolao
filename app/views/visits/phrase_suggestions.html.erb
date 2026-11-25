@@ -1,0 +1,10 @@
+<%= turbo_frame_tag "phrase-suggestions" do %>
+  <% if @suggestions.any? %>
+    <% @suggestions.each_with_index do |suggestion, index| %>
+      <%= render "phrases/suggestion", visit: @visit, suggestion: suggestion, index: index,
+                                       added: @added.include?(suggestion[:japanese]) %>
+    <% end %>
+  <% else %>
+    <p class="text-muted">Suggestions aren't available right now. You can still use the chat below.</p>
+  <% end %>
+<% end %>

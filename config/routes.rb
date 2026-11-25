@@ -8,9 +8,11 @@ Rails.application.routes.draw do
 
   resources :visits, only: [:show, :update] do
     resources :messages, only: [:create]
-    resources :phrases, only: [:create] # phrases heard on the visit, added after the review
+    resources :phrases, only: [:create]         # "Add" on a suggested staff phrase
+    resources :review_messages, only: [:create] # post-visit "what did you hear?" AI chat
     member do
       get :review
+      get :phrase_suggestions # lazy-loaded into the review page
     end
   end
 

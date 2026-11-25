@@ -1,0 +1,13 @@
+<%# Chat input. Locals: visit, error (optional) %>
+<%= form_with url: visit_review_messages_path(visit), scope: :message, id: "chat-form", class: "chat-form mt-3" do |f| %>
+  <% if local_assigns[:error] %>
+    <div class="text-danger small mb-1"><%= error %></div>
+  <% end %>
+  <div class="input-group">
+    <%= f.text_area :content, rows: 2, class: "form-control", maxlength: Message::MAX_LENGTH, required: true,
+                              placeholder: "e.g. The cashier held up a card and said something like 'pointo kaado'…" %>
+    <%= f.button class: "btn btn-warning", data: { turbo_submits_with: "…" } do %>
+      <i class="fa-solid fa-paper-plane"></i><span class="visually-hidden">Send</span>
+    <% end %>
+  </div>
+<% end %>

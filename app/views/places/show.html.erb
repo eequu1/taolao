@@ -11,7 +11,8 @@
   </div>
   <h2>Your Reply</h2>
   <div class="key-phrase">
-    <% @place.phrases.each do |phrase|%>
+    <%# prepped only: phrases users heard after a visit are private to them %>
+    <% @place.phrases.prepped.each do |phrase|%>
       <div class="phrase-card">
         <div class="phrase-text">
           <div class="japanese"> <%= phrase.japanese %></div>

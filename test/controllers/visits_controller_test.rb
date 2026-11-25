@@ -2,6 +2,7 @@ require "test_helper"
 
 class VisitsControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
+  include RubyLLM::TestHelper
 
   setup do
     @user = users(:traveller)
@@ -9,31 +10,35 @@ class VisitsControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
   end
 
-  test "review form shows the ratings and the prepped phrases" do
+  test "review page has the rating form, the suggestions frame and the chat" do
     get review_visit_path(@visit)
     assert_response :success
     assert_select "input[type=radio][name='visit[self_rating]']", 5
     assert_select "input[type=radio][name='visit[confidence]']", 5
     assert_select "input[type=checkbox][value='#{phrases(:konbini_phrase_0).id}']"
+    assert_select "turbo-frame#phrase-suggestions[src='#{phrase_suggestions_visit_path(@visit)}']"
+    assert_select "form#chat-form[action='#{visit_review_messages_path(@visit)}']"
   end
 
-  test "submitting the review completes the visit and awards XP" do
+  test "submitting the review completes the visit, awards XP and returns to the review page" do
     patch visit_path(@visit), params: { visit: { self_rating: 5, confidence: 5,
                                                  used_phrase_ids: [phrases(:konbini_phrase_0).id] } }
 
-    assert_redirected_to visit_path(@visit)
+    assert_redirected_to review_visit_path(@visit)
     assert @visit.reload.completed?
     assert_equal 24, @visit.experience_awarded # 20 visit + 4 for one phrase
     assert_equal 24, @user.reload.experience
   end
 
-  test "the summary shows XP earned and a level-up banner" do
+  test "after reviewing, the XP card replaces the form and the chat stays" do
     patch visit_path(@visit), params: { visit: { self_rating: 5, confidence: 5 } } # 20 XP: still level 1
     patch visit_path(visits(:cafe_ready)), params: { visit: { self_rating: 5, confidence: 5 } } # +100 -> level 3
     follow_redirect!
 
     assert_select ".xp-earned", text: /\+100 XP/
     assert_select ".level-up", text: /level 3/i
+    assert_select "input[name='visit[self_rating]']", 0
+    assert_select "form#chat-form"
   end
 
   test "an incomplete review re-renders the form without awarding XP" do
@@ -44,17 +49,39 @@ class VisitsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 0, @user.reload.experience
   end
 
-  test "a reviewed visit can't be reviewed again" do
-    @visit.complete_review!(self_rating: 5, confidence: 5)
+  test "the review page shows earlier chat messages" do
+    @visit.messages.create!(purpose: :review, role: "assistant", content: "What was the staff member holding?")
+    @visit.messages.create!(purpose: :prep, role: "assistant", content: "Prep chat message")
+
     get review_visit_path(@visit)
-    assert_redirected_to visit_path(@visit)
+    assert_select ".chat-bubble", text: /staff member holding/
+    assert_select ".chat-bubble", text: /Prep chat message/, count: 0
   end
 
-  test "a reviewed visit's summary has the heard-phrases section and form" do
-    @visit.complete_review!(self_rating: 4, confidence: 4)
-    get visit_path(@visit)
-    assert_select "#heard h4", text: /heard but didn't understand/
-    assert_select "form#manual-phrase-form[action='#{visit_phrases_path(@visit)}']"
+  test "phrase suggestions come from the AI with Add buttons" do
+    stub_replies({ phrases: [{ japanese: "温めますか？", romaji: "Atatamemasu ka?", english: "Shall I heat it up?" },
+                             { japanese: "フレーズ0", romaji: "Fureezu 0", english: "Phrase 0" }] }.to_json)
+
+    get phrase_suggestions_visit_path(@visit)
+
+    assert_response :success
+    assert_select "turbo-frame#phrase-suggestions"
+    assert_select "#suggestion_0 form[action='#{visit_phrases_path(@visit)}']"
+    assert_select "#suggestion_1 .added" # フレーズ0 is already one of this visit's phrases
+  end
+
+  test "suggestions degrade gracefully when the AI is unavailable" do
+    stub_replies RubyLLM::ServerError.new("down")
+    get phrase_suggestions_visit_path(@visit)
+    assert_response :success
+    assert_select "turbo-frame#phrase-suggestions p", text: /aren't available/
+  end
+
+  test "the summary lists the phrases the user heard" do
+    visit = visits(:cafe_ready)
+    visit.complete_review!(self_rating: 4, confidence: 4)
+    get visit_path(visit)
+    assert_select ".phrase-card .english", text: "Would you like a bag?"
   end
 
   test "an unreviewed visit's summary links to the review" do
