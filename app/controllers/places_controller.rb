@@ -26,7 +26,12 @@ class PlacesController < ApplicationController
   end
 
   def speak
-    @audio_binary = GeminiTtsService.synthesize(params[:text])
+    text = params[:text].to_s
+    # Gemini takes 3-4s per request, so reuse audio we already generated for the same text.
+    # Bump "v1" if the voice or the audio processing changes, so old audio isn't reused.
+    @audio_binary = Rails.cache.fetch(["tts", "v1", Digest::SHA256.hexdigest(text)], expires_in: 30.days) do
+      GeminiTtsService.synthesize(text)
+    end
     send_data @audio_binary, type: "audio/wav", disposition: "inline"
   end
 
