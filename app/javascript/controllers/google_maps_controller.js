@@ -2,40 +2,36 @@ import { Controller } from "@hotwired/stimulus"
 import GMaps from 'gmaps';
 
 export default class extends Controller {
-  static values = { markers: Array }
+  static values = {
+    markers: Array,
+    center: Object
+  }
 
   connect() {
+    if (typeof google === 'undefined') return;
 
     this.requestUserLocation();
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const userLat = parseFloat(urlParams.get('user_lat'));
-    const userLng = parseFloat(urlParams.get('user_lng'));
+    const markers = this.markersValue;
+    const center = this.centerValue;
 
-    const initialLat = userLat || 35.681;
-    const initialLng = userLng || 139.767;
+    // 1. Determine center coordinates
+    const initialLat = (center && center.lat) ? center.lat : 35.681;
+    const initialLng = (center && center.lng) ? center.lng : 139.767;
+
     const map = new GMaps({ el: '#map', lat: initialLat, lng: initialLng });
 
-    const markers = this.markersValue;
-
-    if (userLat && userLng) {
-      map.setCenter(userLat, userLng);
-      map.setZoom(13);
-
-      map.addMarker({
-        lat: userLat,
-        lng: userLng,
-        title: "Your location"
-      });
+    if (initialLat !== 0 && initialLng !== 0) {
+      map.setCenter(initialLat, initialLng);
+      map.setZoom(12);
     }
 
+    // 2. Render place markers if any exist
     if (markers && markers.length > 0) {
       map.addMarkers(markers);
 
-      if (userLat && userLng) {
-        const bounds = markers.map(m => ({ lat: m.lat, lng: m.lng }));
-        bounds.push({ lat: userLat, lng: userLng });
-        map.fitLatLngBounds(bounds);
+      if (markers.length > 1) {
+        map.fitLatLngBounds(markers);
       }
     }
   }
@@ -43,13 +39,13 @@ export default class extends Controller {
   requestUserLocation() {
     const urlParams = new URLSearchParams(window.location.search);
 
-    if (navigator.geolocation && !urlParams.has('user_lat')) {
+    if (navigator.geolocation && !urlParams.has('user_lat') && !urlParams.has('query')) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           urlParams.set('user_lat', position.coords.latitude);
           urlParams.set('user_lng', position.coords.longitude);
           window.location.search = urlParams.toString();
-        },
+        }
       );
     }
   }
