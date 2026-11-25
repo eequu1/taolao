@@ -1,7 +1,50 @@
 class VisitsController < ApplicationController
+  before_action :set_visit
+
+  # Post-visit summary: XP earned, level progress, phrases used and added.
   def show
   end
 
-  def upate
+  # The post-visit page: rating form (or the XP card once submitted),
+  # suggested staff phrases, and the "what did you hear?" chat.
+  def review
+    @messages = @visit.messages.review.order(:id)
+  end
+
+  def update
+    levels_gained = @visit.complete_review!(
+      self_rating: review_params[:self_rating].to_i,
+      confidence: review_params[:confidence].to_i,
+      used_phrase_ids: used_phrase_ids
+    )
+    flash[:levels_gained] = levels_gained if levels_gained.positive?
+    # Back to the review page, where the form becomes the XP card and the chat stays available
+    redirect_to review_visit_path(@visit)
+  rescue ActiveRecord::RecordInvalid
+    @messages = @visit.messages.review.order(:id)
+    render :review, status: :unprocessable_entity
+  end
+
+  # Turbo Frame content for the review page; slow (AI call) so it loads after the page
+  def phrase_suggestions
+    @suggestions = StaffPhraseSuggester.call(@visit.place)
+    @added = @visit.phrases.pluck(:japanese)
+    render layout: false
+  end
+
+  private
+
+  # Scoped to the signed-in user, so other people's visits are a 404.
+  def set_visit
+    @visit = current_user.visits.find(params[:id])
+  end
+
+  # fetch, not require: an empty submission should re-show the form, not 400
+  def review_params
+    params.fetch(:visit, {}).permit(:self_rating, :confidence, used_phrase_ids: [])
+  end
+
+  def used_phrase_ids
+    @used_phrase_ids = Array(review_params[:used_phrase_ids]).compact_blank.map(&:to_i)
   end
 end

@@ -1,0 +1,29 @@
+<%# XP earned by a reviewed visit, plus level progress. Locals: visit, user %>
+<% if flash[:levels_gained].to_i.positive? %>
+  <div class="level-up alert alert-warning text-center fs-4">
+    <i class="fa-solid fa-star"></i> You reached level <%= user.level %>!
+  </div>
+<% end %>
+
+<div class="xp-card mb-4">
+  <div class="xp-earned">+<%= visit.experience_awarded %> XP</div>
+  <% phrase_xp = visit.phrase_experience(visit.phrases.prepped.where(used: true).count) %>
+  <div class="small text-muted">
+    Going there: <%= visit.experience_awarded - phrase_xp %> XP
+    · Phrases you used: <%= phrase_xp %> XP
+  </div>
+
+  <div class="mt-3 d-flex justify-content-between">
+    <strong>Level <%= user.level %></strong>
+    <% if user.experience_for_next_level %>
+      <span class="small"><%= user.experience_into_level %> / <%= user.experience_for_next_level %> XP</span>
+    <% else %>
+      <span class="small">Max level!</span>
+    <% end %>
+  </div>
+  <% percent = user.experience_for_next_level ? 100 * user.experience_into_level / user.experience_for_next_level : 100 %>
+  <div class="progress" role="progressbar" aria-label="Progress to next level"
+       aria-valuenow="<%= percent %>" aria-valuemin="0" aria-valuemax="100">
+    <div class="progress-bar bg-warning" style="width: <%= percent %>%"></div>
+  </div>
+</div>

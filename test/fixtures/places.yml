@@ -1,0 +1,13 @@
+konbini:
+  name: Test Konbini
+  description: A 24-hour convenience store
+  lat: 35.66
+  long: 139.70
+  minimum_level: 2
+
+cafe:
+  name: Test Cafe
+  description: A specialty coffee shop
+  lat: 35.67
+  long: 139.71
+  minimum_level: 10

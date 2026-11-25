@@ -1,0 +1,28 @@
+<% content_for :title, @visit.place.name %>
+
+<div class="container visit-summary my-4">
+  <h2 class="mb-3"><%= @visit.place.name %></h2>
+
+  <% if @visit.reviewed? %>
+    <%= render "xp_card", visit: @visit, user: current_user %>
+
+    <% used = @visit.phrases.prepped.where(used: true) %>
+    <% if used.any? %>
+      <h4>Phrases you used</h4>
+      <%= render partial: "phrases/phrase", collection: used, as: :phrase %>
+    <% end %>
+
+    <% heard = @visit.phrases.where(source: %i[heard manual]).order(:created_at) %>
+    <% if heard.any? %>
+      <h4 class="mt-4">Phrases you heard</h4>
+      <%= render partial: "phrases/phrase", collection: heard, as: :phrase %>
+    <% end %>
+
+    <%= link_to "Add phrases you heard", review_visit_path(@visit, anchor: "suggestions"),
+                class: "btn btn-outline-warning w-100 mt-3" %>
+    <%= link_to "Find another place", places_path, class: "btn btn-warning w-100 my-3" %>
+  <% else %>
+    <p>Been there already? Tell us how it went to earn XP.</p>
+    <%= link_to "Review my visit", review_visit_path(@visit), class: "btn btn-warning btn-lg w-100" %>
+  <% end %>
+</div>

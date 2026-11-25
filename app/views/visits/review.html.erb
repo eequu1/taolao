@@ -1,0 +1,34 @@
+<% content_for :title, "Review: #{@visit.place.name}" %>
+
+<div class="container review my-4">
+  <h2 class="mb-1">You went to <%= @visit.place.name %>!</h2>
+
+  <%# 1. How it went: the form, or the XP it earned once submitted %>
+  <section id="rating" class="mb-5">
+    <% if @visit.reviewed? %>
+      <%= render "xp_card", visit: @visit, user: current_user %>
+    <% else %>
+      <p class="text-muted mb-4">Every real visit earns XP, even the rough ones.</p>
+      <%= render "review_form", visit: @visit %>
+    <% end %>
+  </section>
+
+  <%# 2. Staff phrases they may have heard (AI, loaded after the page) %>
+  <section id="suggestions" class="mb-5">
+    <h4>Did you hear any of these?</h4>
+    <p class="small text-muted">Things staff often say here. Add any you heard to your study list.</p>
+    <%= turbo_frame_tag "phrase-suggestions", src: phrase_suggestions_visit_path(@visit), loading: :lazy do %>
+      <p class="text-muted"><i class="fa-solid fa-spinner fa-spin"></i> Finding common phrases…</p>
+    <% end %>
+  </section>
+
+  <%# 3. Chat to work out anything else they heard %>
+  <section id="chat" class="mb-5">
+    <h4>Heard something else you didn't understand?</h4>
+    <p class="small text-muted">Describe it and we'll work out what it was together.</p>
+    <div id="chat-messages" class="chat-messages">
+      <%= render partial: "review_messages/message", collection: @messages, as: :message %>
+    </div>
+    <%= render "review_messages/form", visit: @visit %>
+  </section>
+</div>

@@ -1,6 +1,7 @@
 ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
 require "rails/test_help"
+require "ruby_llm/test_helper" # stub_replies / tool_call: scripted AI replies, no network
 
 module ActiveSupport
   class TestCase

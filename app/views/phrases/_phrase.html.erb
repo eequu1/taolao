@@ -1,0 +1,7 @@
+<%= tag.div id: dom_id(phrase), class: "phrase-card" do %>
+  <div class="phrase-text">
+    <% if phrase.japanese.present? %><div class="japanese"><%= phrase.japanese %></div><% end %>
+    <% if phrase.romaji.present? %><div class="romaji"><%= phrase.romaji %></div><% end %>
+    <% if phrase.english.present? %><div class="english"><%= phrase.english %></div><% end %>
+  </div>
+<% end %>

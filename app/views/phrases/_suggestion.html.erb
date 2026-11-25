@@ -1,0 +1,18 @@
+<%# A suggested staff phrase with an Add button. Locals: visit, suggestion, index, added %>
+<div id="suggestion_<%= index %>" class="phrase-card suggestion">
+  <div class="phrase-text">
+    <div class="japanese"><%= suggestion[:japanese] %></div>
+    <div class="romaji"><%= suggestion[:romaji] %></div>
+    <div class="english"><%= suggestion[:english] %></div>
+  </div>
+  <% if added %>
+    <span class="added text-success flex-shrink-0"><i class="fa-solid fa-check"></i> Added</span>
+  <% else %>
+    <%# data-turbo-frame="_top": the response is a Turbo Stream, not frame content %>
+    <%= button_to visit_phrases_path(visit), class: "btn btn-sm btn-warning flex-shrink-0",
+                  params: { suggestion: index, phrase: suggestion.slice(:japanese, :romaji, :english) },
+                  form: { data: { turbo_frame: "_top" } } do %>
+      <i class="fa-solid fa-plus"></i> Add
+    <% end %>
+  <% end %>
+</div>

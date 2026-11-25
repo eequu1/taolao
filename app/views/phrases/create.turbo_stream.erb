@@ -1,0 +1,12 @@
+<%# Flip the suggestion's Add button to "Added" (or show why it failed) %>
+<% if @suggestion_index %>
+  <% if @phrase.persisted? %>
+    <%= turbo_stream.replace "suggestion_#{@suggestion_index}", partial: "phrases/suggestion",
+          locals: { visit: @visit, index: @suggestion_index, added: true,
+                    suggestion: { japanese: @phrase.japanese, romaji: @phrase.romaji, english: @phrase.english } } %>
+  <% else %>
+    <%= turbo_stream.append "suggestion_#{@suggestion_index}" do %>
+      <div class="text-danger small"><%= @phrase.errors.full_messages.to_sentence %></div>
+    <% end %>
+  <% end %>
+<% end %>
