@@ -13,7 +13,7 @@ class PlacesController < ApplicationController
       {
         lat: place.lat,
         lng: place.long,
-        info_window_html: render_to_string(partial: "places/map_box", locals: { place: place })
+        info_window_html: render_to_string(partial: "places/place_box", locals: { place: place })
       }
     end
   end
