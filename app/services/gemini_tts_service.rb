@@ -42,7 +42,7 @@ class GeminiTtsService
     raise "Gemini API did not return audio data: #{json_response}" unless base64_audio
 
     raw_pcm = Base64.decode64(base64_audio)
-    generate_wav_header(raw_pcm)
+    generate_wav_header(fade_out(raw_pcm))
   end
 
   private
@@ -73,5 +73,18 @@ class GeminiTtsService
     ].pack("A4V A4 A4 V v v V V v v A4V")
 
     header + pcm_data
+  end
+
+  # Cut off the last 200ms (where the crackle is), ramp the new end down to
+  # zero over 15ms, and add ~80ms of silence so playback ends cleanly.
+  def self.fade_out(pcm)
+    samples = pcm.unpack("s<*") # 16-bit little-endian samples (drops any stray half sample)
+    samples = samples[0...-4_800] if samples.size > 9_600 # 4800 samples = 200ms at 24kHz
+    fade = [360, samples.size].min # 360 samples = 15ms at 24kHz
+    fade.times do |i|
+      index = samples.size - fade + i
+      samples[index] = (samples[index] * (fade - i - 1) / fade.to_f).round
+    end
+    (samples + Array.new(2_000, 0)).pack("s<*")
   end
 end
