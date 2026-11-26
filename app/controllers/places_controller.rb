@@ -4,17 +4,13 @@ class PlacesController < ApplicationController
     @places = Place.where.not(lat: nil, long: nil)
     @places = @places.where(category: @selected_categories) if @selected_categories.any?
 
-    # A place query wins; otherwise fall back to the user location the Stimulus controller put in the params.
     coords = search_coordinates
     if coords
       @center = { lat: coords[0], lng: coords[1] }
       @places = @places.near(coords, 2, units: :km)
-      flash.now[:notice] = "No places found near #{params[:query]}" if params[:query].present? && @places.empty?
-    elsif params[:query].present?
-      @center = { lat: coords[0], lng: coords[1] }
-      @places = @places.near(coords, 2, units: :km)
-      flash.now[:alert] = "Couldn't find \"#{params[:query]}\""
+      flash.now[:notice] = "No places found near #{params[:query]}" if @places.empty? && params[:query].present?
     end
+    flash.now[:alert] = "Couldn't find \"#{params[:query]}\"" if @query_not_found
 
     @markers = @places.map do |place|
       {
@@ -44,13 +40,21 @@ class PlacesController < ApplicationController
 
   private
 
+  # A place query that geocodes wins. A query that doesn't geocode is reported and ignored, so the map stays
+  # on the user's location (user_lat/user_lng, set by the Stimulus controller and kept by the search form).
   def search_coordinates
     if params[:query].present?
-      coordinate = Geocoder.search(params[:query]).first&.coordinates
-      [params[:user_lat].to_f, params[:user_lng].to_f] unless coordinate.empty? || coordinate.nil?
+      query_coords = Geocoder.search(params[:query]).first&.coordinates
+      return query_coords if query_coords
 
-    elsif params[:user_lat].present? && params[:user_lng].present?
-      [params[:user_lat].to_f, params[:user_lng].to_f]
+      @query_not_found = true
     end
+    user_coordinates
+  end
+
+  def user_coordinates
+    return unless params[:user_lat].present? && params[:user_lng].present?
+
+    [params[:user_lat].to_f, params[:user_lng].to_f]
   end
 end

@@ -54,12 +54,12 @@
        }
 
 
-       &:hover {
+       &:focus {
          background-color: #eaeaea;
        }
 
 
-       &:focus {
+       &:hover {
          outline: none;
          border-color: $navy;
          background-color: #ffffff;
