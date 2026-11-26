@@ -1,8 +1,21 @@
 class VisitsController < ApplicationController
-  before_action :set_visit
+  before_action :set_visit, except: :create
+
+  def create
+    place = Place.find(params[:place_id])
+    visit = current_user.visits.active.find_or_create_by!(place: place)
+    redirect_to visit_path(visit)
+  end
 
   # Post-visit summary: XP earned, level progress, phrases used and added.
   def show
+    @messages = @visit.messages.prep.order(:id)
+    # FAKE for now: the AI will make these later
+    @choices = [
+      { japanese: "ホットでお願いします。", english: "Hot, please" },
+      { japanese: "アイスでお願いします。", english: "Iced, please" },
+      { japanese: "はい。", english: "Yes" }
+    ]
   end
 
   # The post-visit page: rating form (or the XP card once submitted),
