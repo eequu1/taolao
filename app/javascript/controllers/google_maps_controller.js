@@ -39,14 +39,9 @@ export default class extends Controller {
   requestUserLocation() {
     const urlParams = new URLSearchParams(window.location.search);
 
-    // Always ask for the user's location when the URL doesn't have it, even while searching a place:
-    // it's the fallback center if the searched place can't be found.
-    const hasLocation = urlParams.get('user_lat') && urlParams.get('user_lng')
-
-    if (navigator.geolocation && !hasLocation) {
+    if (navigator.geolocation && !urlParams.has('user_lat') && !urlParams.has('query')) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          if (!urlParams.get('query')?.trim()) urlParams.delete('query'); // drop a blank `query=`
           urlParams.set('user_lat', position.coords.latitude);
           urlParams.set('user_lng', position.coords.longitude);
           window.location.search = urlParams.toString();
