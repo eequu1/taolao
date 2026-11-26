@@ -48,6 +48,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_26_040358) do
     t.datetime "updated_at", null: false
     t.string "image_url"
     t.string "category"
+    t.string "google_place_id"
+    t.string "address"
   end
 
   create_table "solid_cable_messages", force: :cascade do |t|

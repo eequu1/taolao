@@ -65,3 +65,65 @@
     border-radius: 50;
   }
 }
+
+.place-card {
+  background: white;
+  color:$black;
+  border: 3px solid $gray;
+  border-radius: 18px;
+  padding: 20px;
+  margin: 12px;
+  width: 100%;
+
+  .place-card-info {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 20px;
+    min-width: 0;
+
+    img {
+      width: 32%;
+      flex-shrink: 0;
+      aspect-ratio: 3 / 2;
+      object-fit: cover;
+    }
+  }
+
+  .place-details {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: break-word;
+  }
+
+  .place-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 6px 0;
+
+    .badge {
+      background-color: $yellow;
+      color: white;
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 1rem;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+  }
+
+  .mission {
+    font-size: 1.2rem;
+    margin: 0;
+  }
+
+  .view-mission-btn {
+    width: 100%;
+    padding: 12px;
+    background: white;
+    color: $navy;
+    border: 2px solid $navy;
+    border-radius: 14px;
+    font-size: 1.3rem;
+  }
+}
