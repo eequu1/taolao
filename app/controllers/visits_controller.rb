@@ -9,6 +9,9 @@ class VisitsController < ApplicationController
 
   # Post-visit summary: XP earned, level progress, phrases used and added.
   def show
+    # Out at the place: show the listening page instead of the practice chat
+    return render :listening if @visit.ready?
+
     @messages = @visit.messages.prep.order(:id)
     # FAKE for now: the AI will make these later
     @choices = [
@@ -16,6 +19,18 @@ class VisitsController < ApplicationController
       { japanese: "アイスでお願いします。", romaji: "Aisu de onegai shimasu.", english: "Iced, please" },
       { japanese: "はい。", romaji: "Hai.", english: "Yes" }
     ]
+  end
+
+  # "I'm ready!" on the practice page: off to the place, show page becomes the listening page
+  def ready
+    @visit.ready! if @visit.active?
+    redirect_to visit_path(@visit)
+  end
+
+  # "Interaction over" on the listening page
+  def complete
+    @visit.completed! if @visit.ready?
+    redirect_to review_visit_path(@visit)
   end
 
   # The post-visit page: rating form (or the XP card once submitted),

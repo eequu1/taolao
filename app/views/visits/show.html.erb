@@ -45,7 +45,7 @@
           <p class="english"><%= choice[:english] %></p>
         <% end %>
       <% end %>
-      <button class="btn ready-btn">I'm ready!</button>
+      <%= button_to "I'm ready!", ready_visit_path(@visit), method: :patch, class: "btn ready-btn" %>
     </div>
   </div>
 <% else %>
