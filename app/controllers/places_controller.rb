@@ -2,13 +2,20 @@ class PlacesController < ApplicationController
   def index
     @places = Place.where.not(lat: nil, long: nil)
     coords = search_coordinates
-    if coords
+    if params[:category].present? && params[:category].reject(&:blank?).any? && coords
+      @places = @places.where(category: params[:category]).near(coords, 2, units: :km)
+      @center = { lat: coords[0], lng: coords[1] }
+      # raise
+    elsif coords
       @center = { lat: coords[0], lng: coords[1] }
       @places = @places.near(coords, 2, units: :km)
     elsif params[:query].present?
       flash.now[:alert] = "Couldn't find \"#{params[:query]}\""
+      @center = { lat: coords[0], lng: coords[1] }
     end
+
     flash.now[:notice] = "No places found near #{params[:query]}" if params[:query].present? && coords && @places.empty?
+
     @markers = @places.map do |place|
       {
         lat: place.lat,

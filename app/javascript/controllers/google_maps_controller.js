@@ -25,8 +25,8 @@ export default class extends Controller {
       map.setCenter(initialLat, initialLng);
       map.setZoom(12);
     }
+    console.log(markers);
 
-    // 2. Render place markers if any exist
     if (markers && markers.length > 0) {
       map.addMarkers(markers);
 
