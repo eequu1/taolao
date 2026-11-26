@@ -12,9 +12,9 @@ class VisitsController < ApplicationController
     @messages = @visit.messages.prep.order(:id)
     # FAKE for now: the AI will make these later
     @choices = [
-      { japanese: "ホットでお願いします。", english: "Hot, please" },
-      { japanese: "アイスでお願いします。", english: "Iced, please" },
-      { japanese: "はい。", english: "Yes" }
+      { japanese: "ホットでお願いします。", romaji: "Hotto de onegai shimasu.", english: "Hot, please" },
+      { japanese: "アイスでお願いします。", romaji: "Aisu de onegai shimasu.", english: "Iced, please" },
+      { japanese: "はい。", romaji: "Hai.", english: "Yes" }
     ]
   end
 
