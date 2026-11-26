@@ -1,18 +1,4 @@
+<%# AiMessageJob broadcasts the reply and removes the typing bubble %>
 <%= turbo_stream.append "chat-messages", partial: "review_messages/message", locals: { message: @user_message } %>
-
-<%# Phrases the AI saved this turn, shown in the chat as cards %>
-<% @result.phrases.each do |phrase| %>
-  <%= turbo_stream.append "chat-messages" do %>
-    <div class="saved-phrase">
-      <div class="small text-success mb-1"><i class="fa-solid fa-book"></i> Added to your study list</div>
-      <%= render "phrases/phrase", phrase: phrase %>
-    </div>
-  <% end %>
-<% end %>
-
-<% if @result.reply %>
-  <%= turbo_stream.append "chat-messages", partial: "review_messages/message", locals: { message: @result.reply } %>
-<% end %>
-
-<%= turbo_stream.replace "chat-form", partial: "review_messages/form",
-                                      locals: { visit: @visit, error: @result.error } %>
+<%= turbo_stream.append "chat-messages", partial: "review_messages/typing" %>
+<%= turbo_stream.replace "chat-form", partial: "review_messages/form", locals: { visit: @visit } %>
