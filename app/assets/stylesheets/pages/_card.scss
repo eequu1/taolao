@@ -1,157 +1,129 @@
 .phrase-card {
- border: 3px solid $orange;
- border-radius: 12px;
- padding: 15px;
- margin-bottom: 12px;
- box-shadow: 0 2px 8px rgba(0,0,0,0.5);
- display: flex;
- justify-content: space-between;
- align-items: center;
+  border: 3px solid $orange;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
+  .japanese {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 3px;
+  }
+  .romaji{
+    font-size: 14px;
+    color: grey;
+    margin-bottom: 3px;
+  }
+  .english{
+    font-size: 14px;
+  }
 
- .japanese {
-   font-size: 16px;
-   font-weight: bold;
-   margin-bottom: 3px;
- }
- .romaji{
-   font-size: 14px;
-   color: grey;
-   margin-bottom: 3px;
- }
- .english{
-   font-size: 14px;
- }
-
-
- .play-btn{
- color: $orange;
- width: 34px;
- font-size: 40px;
- flex-shrink: 0;
+  .play-btn{
+  color: $orange;
+  width: 34px;
+  font-size: 40px;
+  flex-shrink: 0;
 }
 
-
 }
-
 
 .backdrop{
- background-color: $orange;
- padding: 20px;
- flex-direction:column;
- justify-content: center;
- align-items: center;
+  background-color: $orange;
+  padding: 20px;
+  flex-direction:column;
+  justify-content: center;
+  align-items: center;
 }
-
 
 .place-image {
- height: 200px;
- width: 100%;
- object-fit: cover;
- border-radius: 15px;
- margin-bottom: 15px;
+  height: 200px;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 15px;
+  margin-bottom: 15px;
 }
-
 
 .info {
- background-color: white;
- padding: 8px;
- border-radius: 25px;
+  background-color: white;
+  padding: 8px;
+  border-radius: 25px;
 
+  h4{
+    color: black;
+  }
 
- h4{
-   color: black;
- }
+  p{
+    color: grey;
+  }
 
-
- p{
-   color: grey;
- }
-
-
- h5{
-   background-color: $orange;
-   border-radius: 50;
- }
+  h5{
+    background-color: $orange;
+    border-radius: 50;
+  }
 }
 
-
-// Place card in /places page
-
-
 .place-card {
- background: white;
- color: $black;
- border: 3px solid $gray;
- border-radius: 18px;
- padding: 20px;
- margin: 12px 0;
- width: 100%;
+  background: white;
+  color:$black;
+  border: 3px solid $gray;
+  border-radius: 18px;
+  padding: 20px;
+  margin: 12px;
+  width: 100%;
 
+  .place-card-info {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 20px;
+    min-width: 0;
 
- .place-card-info {
-   display: flex;
-   gap: 24px;
-   margin-bottom: 20px;
-   min-width: 0;
+    img {
+      width: 32%;
+      flex-shrink: 0;
+      aspect-ratio: 3 / 2;
+      object-fit: cover;
+    }
+  }
 
+  .place-details {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: break-word;
+  }
 
-   img {
-     width: 32%;
-     flex-shrink: 0;
-     aspect-ratio: 3 / 2;
-     object-fit: cover;
-     border-radius: 12px;
-   }
- }
+  .place-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 6px 0;
 
+    .badge {
+      background-color: $yellow;
+      color: white;
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 1rem;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+  }
 
- .place-details {
-   flex: 1;
-   min-width: 0;
-   overflow-wrap: break-word;
- }
+  .mission {
+    font-size: 1.2rem;
+    margin: 0;
+  }
 
-
- .place-badges {
-   display: flex;
-   flex-wrap: wrap;
-   gap: 8px;
-   margin: 6px 0;
-
-
-   .badge {
-     background-color: $yellow;
-     color: white;
-     border-radius: 20px;
-     padding: 4px 14px;
-     font-size: 1rem;
-     white-space: normal;
-     overflow-wrap: anywhere;
-   }
- }
-
-
- .mission {
-   font-size: 1.2rem;
-   margin: 0;
- }
-
-
- .view-mission-btn {
-   width: 100%;
-   padding: 12px;
-   background: white;
-   color: $navy;
-   border: 2px solid $navy;
-   border-radius: 14px;
-   font-size: 1.3rem;
-   cursor: pointer;
-   transition: background-color 0.2s ease;
-
-
-   &:hover {
-     background-color: rgba($navy, 0.05);
-   }
- }
+  .view-mission-btn {
+    width: 100%;
+    padding: 12px;
+    background: white;
+    color: $navy;
+    border: 2px solid $navy;
+    border-radius: 14px;
+    font-size: 1.3rem;
+  }
 }
