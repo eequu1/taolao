@@ -1,12 +1,9 @@
 <% content_for :title, @visit.place.name %>
-
 <% if @visit.active? %>
   <%# ===== PRACTICE PAGE (before the visit) ===== %>
   <div class="practice">
-
     <%# Orange chat area %>
     <div class="practice-chat">
-
       <%# No messages yet: show the staff greeting %>
       <% if @messages.empty? %>
         <div class="bubble-row staff">
@@ -17,7 +14,6 @@
           </div>
         </div>
       <% end %>
-
       <%# One bubble per message %>
       <% @messages.each do |message| %>
         <% if message.role == "assistant" %>
@@ -38,23 +34,18 @@
         <% end %>
       <% end %>
     </div>
-
     <%# White area: input, choices, ready button %>
     <div class="practice-bottom">
       <input type="text" class="form-control" placeholder="What do you want? e.g. iced matcha latte, less ice">
-
       <h3 class="reply-title">Your reply</h3>
-
       <% @choices.each do |choice| %>
-        <button class="choice">
+        <%= button_to visit_messages_path(@visit), params: { content: choice[:japanese] }, class: "choice" do %>
           <p class="japanese"><%= choice[:japanese] %></p>
           <p class="english"><%= choice[:english] %></p>
-        </button>
+        <% end %>
       <% end %>
-
       <button class="btn ready-btn">I'm ready!</button>
     </div>
-
   </div>
 <% else %>
   <%# ===== TEAMMATE'S SUMMARY (after the visit): unchanged ===== %>
