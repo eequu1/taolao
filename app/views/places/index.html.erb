@@ -1,43 +1,56 @@
 <div class="orange-session">
-  <div class="search-bar">
-    <%= form_with url: places_path, method: :get, class: "group" do %>
-      <svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
-        <path d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"></path>
-      </svg>
+ <%= form_with url: places_path, method: :get, class: "filter-form" do |f| %>
 
-      <%= label_tag :query, "Search", class: "visually-hidden" %>
-      <%= text_field_tag :query, params[:query],
-          class: "input",
-          placeholder: "Search for a location",
-          type: "search" %>
-    <% end %>
-  </div>
+ <div class="search-bar">
+   <div class="group">
+     <svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
+       <path d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"></path>
+     </svg>
 
-  <div class="places-container">
-    <div class="category-filter">
-      <% [
-        ["cafe", "Café"],
-        ["ramen", "Ramen"],
-        ["convenience_store", "Convenience store"]
-      ].each_with_index do |(value, label), index| %>
-        <label class="filter-item">
-          <%= check_box_tag "category[]", value, index.zero? %>
-          <span class="checkbox"></span>
-          <span class="label"><%= label %></span>
-        </label>
-      <% end %>
-    </div>
+     <%= label_tag :query, "Search", class: "visually-hidden" %>
+     <%= text_field_tag :query, params[:query],
+         class: "input",
+         placeholder: "Search for a location (e.g. Meguro, Shibuya)",
+         type: "search" %>
+     <% if params[:user_lat].present? && params[:user_lng].present? %>
+       <%= hidden_field_tag :user_lat, params[:user_lat], id: nil %>
+       <%= hidden_field_tag :user_lng, params[:user_lng], id: nil %>
+     <% end %>
+   </div>
+ </div>
 
-    <div id="map"
-      data-controller="google-maps"
-      data-google-maps-markers-value="<%= @markers.to_json %>">
-    </div>
-  </div>
+ <div class="category-filter">
+   <% [
+     ["cafe", "Café ☕"],
+     ["ramen", "Ramen 🍜"],
+     ["combini", "Convenience store 🏪"]
+   ].each do |value, label| %>
+
+     <% is_checked = params[:category].nil? ? true : params[:category].include?(value) %>
+
+     <label class="filter-item">
+       <%= check_box_tag "category[]", value, is_checked,
+           class: "filter-checkbox",
+           onchange: "this.form.requestSubmit()" %>
+       <span class="label"><%= label %></span>
+     </label>
+   <% end %>
+ </div>
+ <% end %>
+
+ <div class="places-container">
+   <div id="map"
+     data-controller="google-maps"
+     data-google-maps-markers-value="<%= @markers.to_json %>"
+     data-google-maps-center-value="<%= (@center || {}).to_json %>"
+     style="width: 100%; height: 400px; border-radius: 14px;">
+   </div>
+ </div>
 </div>
 
 <h4>Locations</h4>
 <div class="container">
-  <div class="row">
-    <%= render partial: "places/place_box", collection: @places, as: :place %>
-  </div>
+ <div class="row">
+   <%= render partial: "places/place_box", collection: @places, as: :place %>
+ </div>
 </div>
