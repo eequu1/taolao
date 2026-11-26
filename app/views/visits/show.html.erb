@@ -1,28 +1,75 @@
 <% content_for :title, @visit.place.name %>
-
-<div class="container visit-summary my-4">
-  <h2 class="mb-3"><%= @visit.place.name %></h2>
-
-  <% if @visit.reviewed? %>
-    <%= render "xp_card", visit: @visit, user: current_user %>
-
-    <% used = @visit.phrases.prepped.where(used: true) %>
-    <% if used.any? %>
-      <h4>Phrases you used</h4>
-      <%= render partial: "phrases/phrase", collection: used, as: :phrase %>
+<% if @visit.active? %>
+  <%# ===== PRACTICE PAGE (before the visit) ===== %>
+  <div class="practice">
+    <%# Orange chat area %>
+    <div class="practice-chat">
+      <%# No messages yet: show the staff greeting %>
+      <% if @messages.empty? %>
+        <div class="bubble-row staff">
+          <div class="avatar"><i class="fa-solid fa-user-tie"></i></div>
+          <div class="bubble">
+            <p class="japanese">いらっしゃいませ。ご注文は？</p>
+            <p class="english">Welcome, what would you like?</p>
+          </div>
+        </div>
+      <% end %>
+      <%# One bubble per message %>
+      <% @messages.each do |message| %>
+        <% if message.role == "assistant" %>
+          <%# Staff (AI) message: left, white %>
+          <div class="bubble-row staff">
+            <div class="avatar"><i class="fa-solid fa-user-tie"></i></div>
+            <div class="bubble">
+              <p class="japanese"><%= message.content %></p>
+            </div>
+          </div>
+        <% else %>
+          <%# User message: right, blue %>
+          <div class="bubble-row user">
+            <div class="bubble">
+              <p class="japanese"><%= message.content %></p>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+    <%# White area: input, choices, ready button %>
+    <div class="practice-bottom">
+      <input type="text" class="form-control" placeholder="What do you want? e.g. iced matcha latte, less ice">
+      <h3 class="reply-title">Your reply</h3>
+      <% @choices.each do |choice| %>
+        <%= button_to visit_messages_path(@visit), params: { content: choice[:japanese] }, class: "choice" do %>
+          <p class="japanese"><%= choice[:japanese] %></p>
+          <p class="romaji"><%= choice[:romaji] %></p>
+          <p class="english"><%= choice[:english] %></p>
+        <% end %>
+      <% end %>
+      <button class="btn ready-btn">I'm ready!</button>
+    </div>
+  </div>
+<% else %>
+  <%# ===== TEAMMATE'S SUMMARY (after the visit): unchanged ===== %>
+  <div class="container visit-summary my-4">
+    <h2 class="mb-3"><%= @visit.place.name %></h2>
+    <% if @visit.reviewed? %>
+      <%= render "xp_card", visit: @visit, user: current_user %>
+      <% used = @visit.phrases.prepped.where(used: true) %>
+      <% if used.any? %>
+        <h4>Phrases you used</h4>
+        <%= render partial: "phrases/phrase", collection: used, as: :phrase %>
+      <% end %>
+      <% heard = @visit.phrases.where(source: %i[heard manual]).order(:created_at) %>
+      <% if heard.any? %>
+        <h4 class="mt-4">Phrases you heard</h4>
+        <%= render partial: "phrases/phrase", collection: heard, as: :phrase %>
+      <% end %>
+      <%= link_to "Add phrases you heard", review_visit_path(@visit, anchor: "suggestions"),
+                  class: "btn btn-outline-warning w-100 mt-3" %>
+      <%= link_to "Find another place", places_path, class: "btn btn-warning w-100 my-3" %>
+    <% else %>
+      <p>Been there already? Tell us how it went to earn XP.</p>
+      <%= link_to "Review my visit", review_visit_path(@visit), class: "btn btn-warning btn-lg w-100" %>
     <% end %>
-
-    <% heard = @visit.phrases.where(source: %i[heard manual]).order(:created_at) %>
-    <% if heard.any? %>
-      <h4 class="mt-4">Phrases you heard</h4>
-      <%= render partial: "phrases/phrase", collection: heard, as: :phrase %>
-    <% end %>
-
-    <%= link_to "Add phrases you heard", review_visit_path(@visit, anchor: "suggestions"),
-                class: "btn btn-outline-warning w-100 mt-3" %>
-    <%= link_to "Find another place", places_path, class: "btn btn-warning w-100 my-3" %>
-  <% else %>
-    <p>Been there already? Tell us how it went to earn XP.</p>
-    <%= link_to "Review my visit", review_visit_path(@visit), class: "btn btn-warning btn-lg w-100" %>
-  <% end %>
-</div>
+  </div>
+<% end %>

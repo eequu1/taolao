@@ -1,0 +1,116 @@
+$practice-orange: #FFA62B;
+$practice-navy: #344A8F;
+
+
+.practice {
+  max-width: 480px;
+  margin:0 auto;
+  background-color: white;
+  min-height: 100vh;
+
+  p{
+    margin: 0;
+  }
+
+
+  .practice-chat{
+    background-color: $practice-orange ;
+    padding: 24px 16px;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .bubble-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+
+    &.staff {
+      justify-content: flex-start;
+    }
+
+    &.user {
+      justify-content: flex-end ;
+
+      .bubble {
+        background-color: $practice-navy;
+        color: white;
+      }
+    }
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: white;
+    color: $practice-navy;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .bubble {
+    background-color: white;
+    border-radius: 8px;
+    padding: 10px 14px;
+    max-width: 75%;
+  }
+
+  .japanese {
+    font-weight: 700;
+  }
+  .english {
+    font-size: 13px;
+  }
+
+
+  .choice {
+    text-align: left;
+    background-color: white;
+    border: 3px solid orange;
+    border-radius: 12px;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    width: 100%;
+
+    .japanese {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 3px;
+    }
+    .english {
+      font-size: 14px;
+    }
+    .romaji {
+      font-size: 14px;
+      color: grey;
+      margin-bottom: 3px;
+    }
+
+  }
+  .practice-bottom {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+
+  .ready-btn {
+    --bs-btn-bg: #{$practice-navy};
+    --bs-btn-color: white;
+    --bs-btn-hover-bg: #{darken($practice-navy, 10%)};
+    --bs-btn-hover-color: white;
+    --bs-btn-active-bg: #{darken($practice-navy, 15%)};
+    --bs-btn-active-color: white;
+    font-weight: 700;
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 24px;
+
+    }
+  }
