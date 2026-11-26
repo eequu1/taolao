@@ -1,20 +1,20 @@
 class PlacesController < ApplicationController
   def index
+    @selected_categories = Array(params[:category]).map(&:to_s) & Place::CATEGORIES.keys
     @places = Place.where.not(lat: nil, long: nil)
+    @places = @places.where(category: @selected_categories) if @selected_categories.any?
+
+    # A place query wins; otherwise fall back to the user location the Stimulus controller put in the params.
     coords = search_coordinates
-    if params[:category].present? && params[:category].reject(&:blank?).any? && coords
-      @places = @places.where(category: params[:category]).near(coords, 2, units: :km)
-      @center = { lat: coords[0], lng: coords[1] }
-      # raise
-    elsif coords
+    if coords
       @center = { lat: coords[0], lng: coords[1] }
       @places = @places.near(coords, 2, units: :km)
+      flash.now[:notice] = "No places found near #{params[:query]}" if params[:query].present? && @places.empty?
     elsif params[:query].present?
-      flash.now[:alert] = "Couldn't find \"#{params[:query]}\""
       @center = { lat: coords[0], lng: coords[1] }
+      @places = @places.near(coords, 2, units: :km)
+      flash.now[:alert] = "Couldn't find \"#{params[:query]}\""
     end
-
-    flash.now[:notice] = "No places found near #{params[:query]}" if params[:query].present? && coords && @places.empty?
 
     @markers = @places.map do |place|
       {
@@ -46,7 +46,9 @@ class PlacesController < ApplicationController
 
   def search_coordinates
     if params[:query].present?
-      Geocoder.search(params[:query]).first&.coordinates
+      coordinate = Geocoder.search(params[:query]).first&.coordinates
+      [params[:user_lat].to_f, params[:user_lng].to_f] unless coordinate.empty? || coordinate.nil?
+
     elsif params[:user_lat].present? && params[:user_lng].present?
       [params[:user_lat].to_f, params[:user_lng].to_f]
     end

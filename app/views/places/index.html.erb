@@ -14,8 +14,10 @@
          class: "input",
          placeholder: "Search for a location (e.g. Meguro, Shibuya)",
          type: "search" %>
-     <%= hidden_field_tag :user_lat, params[:user_lat] unless params[:query] == "" || params[:query] %>
-     <%= hidden_field_tag :user_lng, params[:user_lng] unless params[:query] == "" || params[:query] %>
+     <% if params[:query].blank? && params[:user_lat].present? && params[:user_lng].present? %>
+       <%= hidden_field_tag :user_lat, params[:user_lat], id: nil %>
+       <%= hidden_field_tag :user_lng, params[:user_lng], id: nil %>
+     <% end %>
    </div>
  </div>
 
@@ -39,10 +41,7 @@
      </label>
    <% end %>
  </div>
-
-
  <% end %>
-
 
  <div class="places-container">
    <div id="map"
@@ -53,7 +52,6 @@
    </div>
  </div>
 </div>
-
 
 <h4>Locations</h4>
 <div class="container">
