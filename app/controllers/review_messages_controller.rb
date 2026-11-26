@@ -3,15 +3,15 @@
 class ReviewMessagesController < ApplicationController
   before_action :set_visit
 
-  # Synchronous: the AI reply arrives in the same request (a few seconds),
-  # while Turbo shows "…" on the send button.
+  # Saves the user's message and shows a typing bubble; AiMessageJob gets the AI's
+  # reply in the background and broadcasts it to the review page.
   def create
-    @result = PhraseFinderChat.new(@visit).reply_to(params.dig(:message, :content))
-    @user_message = @result.user_message
+    @user_message = @visit.messages.review.create!(role: "user", content: params.dig(:message, :content).to_s.strip)
+    AiMessageJob.perform_later(@user_message)
 
     respond_to do |format|
       format.turbo_stream
-      format.html { redirect_to chat_path, alert: @result.error }
+      format.html { redirect_to chat_path }
     end
   rescue ActiveRecord::RecordInvalid
     render_invalid

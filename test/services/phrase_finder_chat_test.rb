@@ -8,10 +8,15 @@ class PhraseFinderChatTest < ActiveSupport::TestCase
     @chat = PhraseFinderChat.new(@visit)
   end
 
+  # Saves the user's message (as the controller does) and asks for a reply
+  def reply_to(text)
+    @chat.reply_to(@visit.messages.review.create!(role: "user", content: text))
+  end
+
   test "a clarifying question is saved as a review message" do
     stub_replies "Was the staff member holding anything when they said it?"
 
-    result = @chat.reply_to("The cashier said something like 'pointo kaado'")
+    result = reply_to("The cashier said something like 'pointo kaado'")
 
     assert_equal ["user", "assistant"], @visit.messages.review.order(:id).pluck(:role)
     assert_equal "Was the staff member holding anything when they said it?", result.reply.content
@@ -26,7 +31,7 @@ class PhraseFinderChatTest < ActiveSupport::TestCase
 
     result = nil
     assert_difference "@visit.phrases.heard.count", 1 do
-      result = @chat.reply_to("They held up a card and said 'pointo kaado wa'")
+      result = reply_to("They held up a card and said 'pointo kaado wa'")
     end
 
     phrase = result.phrases.sole
@@ -42,7 +47,7 @@ class PhraseFinderChatTest < ActiveSupport::TestCase
                  "It's already on your list."
 
     assert_no_difference "Phrase.count" do
-      @chat.reply_to("Something about atatame")
+      reply_to("Something about atatame")
     end
   end
 
@@ -52,7 +57,7 @@ class PhraseFinderChatTest < ActiveSupport::TestCase
     @visit.messages.create!(purpose: :review, role: "assistant", content: "Earlier review answer")
     stub_replies "OK"
 
-    sent = @chat.reply_to("New question").chat.messages.select { |m| %i[user assistant].include?(m.role) }
+    sent = reply_to("New question").chat.messages.select { |m| %i[user assistant].include?(m.role) }
 
     assert_equal ["Earlier review question", "Earlier review answer", "New question", "OK"], sent.map(&:content)
   end
@@ -60,15 +65,9 @@ class PhraseFinderChatTest < ActiveSupport::TestCase
   test "an API failure keeps the user's message and returns an apology" do
     stub_replies RubyLLM::ServerError.new("OpenAI is down")
 
-    result = @chat.reply_to("Hello?")
+    result = reply_to("Hello?")
 
     assert result.error?
     assert_equal ["user"], @visit.messages.review.pluck(:role)
-  end
-
-  test "blank or over-long messages are rejected before calling the AI" do
-    assert_raises(ActiveRecord::RecordInvalid) { @chat.reply_to("   ") }
-    assert_raises(ActiveRecord::RecordInvalid) { @chat.reply_to("a" * 2001) }
-    assert_empty @visit.messages
   end
 end

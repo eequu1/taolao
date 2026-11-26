@@ -26,6 +26,8 @@
   <section id="chat" class="mb-5">
     <h4>Heard something else you didn't understand?</h4>
     <p class="small text-muted">Describe it and we'll work out what it was together.</p>
+    <%# AI replies arrive here from AiMessageJob %>
+    <%= turbo_stream_from @visit, :review_chat %>
     <div id="chat-messages" class="chat-messages">
       <%= render partial: "review_messages/message", collection: @messages, as: :message %>
     </div>

@@ -2,7 +2,7 @@
 # staff said that they didn't understand; the AI asks follow-up questions until
 # it's confident, then calls RecordPhraseTool to save the phrase to their study list.
 #
-#   result = PhraseFinderChat.new(visit).reply_to("They said something like 'pointo kaado'")
+#   result = PhraseFinderChat.new(visit).reply_to(user_message)  # an already-saved review Message
 #   result.reply    # => the saved assistant Message (nil on error)
 #   result.phrases  # => Phrases saved this turn
 #
@@ -20,15 +20,14 @@ class PhraseFinderChat
     @visit = visit
   end
 
-  # Raises ActiveRecord::RecordInvalid for a blank or over-long message,
-  # before anything is sent to the AI.
-  def reply_to(text)
-    history = @visit.messages.review.order(:id).to_a
-    user_message = @visit.messages.review.create!(role: "user", content: text.to_s.strip)
+  # user_message is the traveller's already-saved review Message (ReviewMessagesController
+  # validates and saves it; AiMessageJob calls this). Only earlier messages are history.
+  def reply_to(user_message)
+    history = @visit.messages.review.where(id: ...user_message.id).order(:id).to_a
 
     tool = RecordPhraseTool.new(@visit)
     chat = build_chat(tool, history)
-    reply = @visit.messages.review.create!(role: "assistant", content: reply_text(chat.ask(text.to_s.strip)))
+    reply = @visit.messages.review.create!(role: "assistant", content: reply_text(chat.ask(user_message.content)))
     Result.new(user_message: user_message, reply: reply, phrases: tool.recorded, chat: chat)
   rescue *StaffPhraseSuggester::AI_ERRORS => e
     Rails.logger.warn("[PhraseFinderChat] visit #{@visit.id}: #{e.class}: #{e.message}")
