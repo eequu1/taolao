@@ -74,6 +74,7 @@ group :test do
 end
 
 gem "geocoder"
+gem "httparty"
 
 # LLM client (OpenAI) for the post-visit phrase suggestions and chat
 gem "ruby_llm", "~> 2.2"
