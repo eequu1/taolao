@@ -85,8 +85,34 @@ class VisitsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "an unreviewed visit's summary links to the review" do
+    @visit.completed!
     get visit_path(@visit)
     assert_select "a[href='#{review_visit_path(@visit)}']"
+  end
+
+  test "I'm ready! marks the visit ready and shows the listening page" do
+    @visit.active!
+    patch ready_visit_path(@visit)
+
+    assert_redirected_to visit_path(@visit)
+    assert @visit.reload.ready?
+    follow_redirect!
+    assert_select ".listening-text", text: "You shouldn't be looking at me"
+    assert_select "form[action='#{complete_visit_path(@visit)}']"
+  end
+
+  test "Interaction over completes the visit and goes to the review" do
+    patch complete_visit_path(@visit)
+
+    assert_redirected_to review_visit_path(@visit)
+    assert @visit.reload.completed?
+  end
+
+  test "another user's visit can't be marked ready or completed" do
+    other = visits(:other_users_visit)
+    patch complete_visit_path(other)
+    assert_response :not_found
+    assert other.reload.ready?
   end
 
   test "another user's visit can't be viewed" do

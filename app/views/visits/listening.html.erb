@@ -1,0 +1,7 @@
+<% content_for :title, @visit.place.name %>
+<%# ===== LISTENING PAGE (during the visit) ===== %>
+<div class="listening">
+  <p class="listening-text">You shouldn't be looking at me</p>
+  <%= button_to "Interaction over", complete_visit_path(@visit), method: :patch,
+                class: "btn btn-light btn-lg w-100", form_class: "listening-form" %>
+</div>
