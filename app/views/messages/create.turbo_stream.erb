@@ -1,0 +1,6 @@
+<%= turbo_stream.append "practice-messages" do %>
+  <%= render "messages/message", message: @message %>
+  <%= render "messages/typing" %>
+<% end %>
+<%= turbo_stream.update "practice-choices" do %>
+<% end %>

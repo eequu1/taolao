@@ -10,12 +10,14 @@ class VisitsController < ApplicationController
   # Post-visit summary: XP earned, level progress, phrases used and added.
   def show
     @messages = @visit.messages.prep.order(:id)
-    # FAKE for now: the AI will make these later
-    @choices = [
-      { japanese: "ホットでお願いします。", romaji: "Hotto de onegai shimasu.", english: "Hot, please" },
-      { japanese: "アイスでお願いします。", romaji: "Aisu de onegai shimasu.", english: "Iced, please" },
-      { japanese: "はい。", romaji: "Hai.", english: "Yes" }
+    # Before the AI has answered: replies to the greeting
+    default_choices = [
+      { japanese: "コーヒーを一つください。", romaji: "Koohii o hitotsu kudasai.", english: "One coffee, please." },
+      { japanese: "おすすめは何ですか？", romaji: "Osusume wa nan desu ka?", english: "What do you recommend?" },
+      { japanese: "メニューを見せてください。", romaji: "Menyuu o misete kudasai.", english: "Can I see the menu, please?" }
     ]
+    # The AI's latest choices (saved by MessagesController), or the starter ones
+    @choices = (@visit.prep["choices"].presence || default_choices).map(&:symbolize_keys)
   end
 
   # The post-visit page: rating form (or the XP card once submitted),

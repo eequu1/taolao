@@ -1,0 +1,18 @@
+<% if message.role == "assistant" %>
+  <%# Staff (AI) message: left, white %>
+  <div class="bubble-row staff">
+    <div class="avatar"><i class="fa-solid fa-user-tie"></i></div>
+    <div class="bubble">
+      <p class="japanese"><%= message.content %></p>
+      <p class="english"><%= message.translation %></p>
+    </div>
+  </div>
+<% else %>
+  <%# User message: right, blue %>
+  <div class="bubble-row user">
+    <div class="bubble">
+      <p class="japanese"><%= message.content %></p>
+      <p class="english"><%= message.translation %></p>
+    </div>
+  </div>
+<% end %>
