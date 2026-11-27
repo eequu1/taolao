@@ -5,7 +5,7 @@
   <% end %>
   <div class="input-group">
     <%= f.text_area :content, rows: 2, class: "form-control", maxlength: Message::MAX_LENGTH, required: true,
-                              placeholder: "e.g. The cashier held up a card and said something like 'pointo kaado'…" %>
+                              placeholder: "Tell me about a phrase you didn't understand" %>
     <%= f.button class: "btn btn-warning", data: { turbo_submits_with: "…" } do %>
       <i class="fa-solid fa-paper-plane"></i><span class="visually-hidden">Send</span>
     <% end %>

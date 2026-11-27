@@ -5,10 +5,8 @@
                              low: "Rough", high: "Great" %>
   <%= render "rating_scale", f: f, field: :confidence, question: "How confident did you feel?",
                              low: "Very nervous", high: "Very confident" %>
-
   <fieldset class="mb-4">
-    <legend class="fs-5">Which phrases did you use?</legend>
-    <p class="small text-muted">Your phrases and this place's key phrases. Tick any you said.</p>
+    <p class="small text-muted">Tick any used for XP</p>
     <%# Empty values so the keys are always sent, even with nothing ticked %>
     <%= hidden_field_tag "visit[used_phrase_ids][]", "" %>
     <%= hidden_field_tag "visit[used_place_phrase_ids][]", "" %>
@@ -28,9 +26,15 @@
           <label for="<%= dom_id %>" class="phrase-card phrase-choice">
             <div class="phrase-text">
               <div class="speaker"><%= phrase.staff? ? "Staff line" : "Your line" %></div>
-              <% if phrase.japanese.present? %><div class="japanese"><%= phrase.japanese %></div><% end %>
-              <% if phrase.romaji.present? %><div class="romaji"><%= phrase.romaji %></div><% end %>
-              <% if phrase.english.present? %><div class="english"><%= phrase.english %></div><% end %>
+              <% if phrase.japanese.present? %>
+                <div class="japanese"><%= phrase.japanese %></div>
+              <% end %>
+              <% if phrase.romaji.present? %>
+                <div class="romaji"><%= phrase.romaji %></div>
+              <% end %>
+              <% if phrase.english.present? %>
+                <div class="english"><%= phrase.english %></div>
+              <% end %>
             </div>
             <i class="fa-solid fa-circle-check check-icon"></i>
           </label>
@@ -40,5 +44,4 @@
       <p class="text-muted">No phrases for this place yet.</p>
     <% end %>
   </fieldset>
-
 <% end %>

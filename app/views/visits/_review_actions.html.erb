@@ -7,7 +7,7 @@
     <%= link_to "Back to #{visit.place.name}", place_path(visit.place), class: "btn btn-warning btn-lg w-100" %>
   <% else %>
     <%# Outside the rating form (the chat form sits in between), so it points at it by id %>
-    <%= button_tag "Save my visit", type: :submit, form: "review-form", class: "btn btn-warning btn-lg w-100",
+    <%= button_tag "Done", type: :submit, form: "review-form", class: "btn btn-warning btn-lg w-100",
                                     data: { turbo_submits_with: "Saving…" } %>
   <% end %>
 </section>

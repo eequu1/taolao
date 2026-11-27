@@ -1,27 +1,20 @@
 <% content_for :title, "Review: #{@visit.place.name}" %>
-
 <div class="container review my-4">
   <h2 class="mb-1">You went to <%= @visit.place.name %>!</h2>
-
   <%# 1. How it went: the form, or the XP it earned once submitted %>
   <%# Replaced by update.turbo_stream.erb on submit, so the rest of the page stays as it is %>
   <section id="rating" class="mb-5">
     <%= render "rating", visit: @visit, user: current_user %>
   </section>
-
   <%# 2. Staff phrases they may have heard (AI, loaded after the page) %>
   <section id="suggestions" class="mb-5">
-    <h4>Did you hear any of these?</h4>
-    <p class="small text-muted">Things staff often say here. Add any you heard to your study list.</p>
+    <p class="small text-muted">Hear any? Add to your study list.</p>
     <%= turbo_frame_tag "phrase-suggestions", src: phrase_suggestions_visit_path(@visit), loading: :lazy do %>
       <p class="text-muted"><i class="fa-solid fa-spinner fa-spin"></i> Finding common phrases…</p>
     <% end %>
   </section>
-
   <%# 3. Chat to work out anything else they heard %>
   <section id="chat" class="mb-5">
-    <h4>Heard something else you didn't understand?</h4>
-    <p class="small text-muted">Describe it and we'll work out what it was together.</p>
     <%# AI replies arrive here from AiMessageJob %>
     <%= turbo_stream_from @visit, :review_chat %>
     <div id="chat-messages" class="chat-messages">
@@ -29,7 +22,6 @@
     </div>
     <%= render "review_messages/form", visit: @visit %>
   </section>
-
   <%# 4. "Save my visit" (submits the rating form above), then a way back to the place %>
   <%= render "review_actions", visit: @visit %>
 </div>
