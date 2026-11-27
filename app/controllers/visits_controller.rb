@@ -4,6 +4,7 @@ class VisitsController < ApplicationController
   def create
     place = Place.find(params[:place_id])
     visit = current_user.visits.active.find_or_create_by!(place: place)
+    PracticeMessageJob.perform_later(visit) if visit.messages.prep.empty?
     redirect_to visit_path(visit)
   end
 
@@ -13,14 +14,7 @@ class VisitsController < ApplicationController
     return render :listening if @visit.ready?
 
     @messages = @visit.messages.prep.order(:id)
-    # Before the AI has answered: replies to the greeting
-    default_choices = [
-      { japanese: "すみません。", romaji: "Sumimasen.", english: "Excuse me." },
-      { japanese: "おすすめは何ですか？", romaji: "Osusume wa nan desu ka?", english: "What do you recommend?" },
-      { japanese: "メニューを見せてください。", romaji: "Menyuu o misete kudasai.", english: "Can I see the menu, please?" }
-    ]
-    # The AI's latest choices (saved by MessagesController), or the starter ones
-    @choices = (@visit.prep["choices"].presence || default_choices).map(&:symbolize_keys)
+    @choices = @visit.prep["choices"] || []
   end
 
   # "I'm ready!" on the practice page: off to the place, show page becomes the listening page

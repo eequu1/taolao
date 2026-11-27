@@ -5,7 +5,7 @@ class MessagesController < ApplicationController
                            purpose: :prep, visit: @visit)
 
     if @message.save
-      PracticeMessageJob.perform_later(@message)
+      PracticeMessageJob.perform_later(@visit)
       respond_to do |format|
         format.turbo_stream # renders app/views/messages/create.turbo_stream.erb
         format.html { redirect_to visit_path(@visit) }
