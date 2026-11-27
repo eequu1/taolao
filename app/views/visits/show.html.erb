@@ -9,7 +9,7 @@
       <%# No messages yet: the AI is writing the first line %>
       <% if @messages.empty? %>
         <%= render "messages/typing" %>
-      <% end %>>
+      <% end %>
       <%# One bubble per message %>
       <% @messages.each do |message| %>
         <%= render "messages/message", message: message %>
