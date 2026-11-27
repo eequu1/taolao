@@ -5,12 +5,9 @@
       <h1> <%= @place.name %> </h1>
       <p> <%= @place.description %> </p>
     </div>
-    <span class="highlight"> Minimum Level:<%= @place.minimum_level %></span>
   </div>
 </div>
-
 <div class="container">
-  <h2>Your Reply</h2>
   <div class="key-phrase">
     <%# prepped only: phrases users heard after a visit are private to them %>
     <% @place.phrases.prepped.each do |phrase|%>
@@ -21,21 +18,19 @@
           <div class="english"><%= phrase.english %></div>
         </div>
         <div
-              class="play-btn"
-              data-controller="tts"
-              data-tts-text-value="<%= phrase.japanese %>"
-              data-tts-url-value="<%= speak_place_path(@place) %>"
-              data-action="click->tts#play"
-          style="cursor: pointer;"
-          >
+          class="play-btn"
+          data-controller="tts"
+          data-tts-text-value="<%= phrase.japanese %>"
+          data-tts-url-value="<%= speak_place_path(@place) %>"
+          data-action="click->tts#play"
+          style="cursor: pointer;">
           <i class="fa-regular fa-circle-play"></i>
         </div>
       </div>
     <% end %>
   </div>
-  
   <div class="d-flex justify-content-center">
-    <%= button_to "Create a Visit", place_visits_path(@place), class:"btn start-btn" %>
+    <%= button_to "Let's go!", place_visits_path(@place), class:"btn start-btn" %>
   </div>
   <% if @my_phrases.any? %>
     <h2 class="mt-4">Your phrases</h2>
@@ -44,8 +39,6 @@
       <%= render partial: "places/phrase_card", collection: @my_phrases, as: :phrase, locals: { place: @place } %>
     </div>
   <% end %>
-  <h2>Key phrases</h2>
-  <p class="text-muted">A conversation from walking in to leaving, for ordering here.</p>
   <%# Phrases generated in the background arrive here from PlacePhrasesJob %>
   <%= turbo_stream_from @place, :phrases %>
   <%= render "places/phrases", place: @place, generating: @generating_phrases %>
