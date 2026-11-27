@@ -114,3 +114,9 @@ $practice-navy: #344A8F;
 
     }
   }
+
+#practice-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
