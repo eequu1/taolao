@@ -33,7 +33,20 @@
       </div>
     <% end %>
   </div>
+  
   <div class="d-flex justify-content-center">
     <%= button_to "Create a Visit", place_visits_path(@place), class:"btn start-btn" %>
   </div>
+  <% if @my_phrases.any? %>
+    <h2 class="mt-4">Your phrases</h2>
+    <p class="text-muted">Phrases you added on your visits here. Only you can see these.</p>
+    <div class="place-phrases">
+      <%= render partial: "places/phrase_card", collection: @my_phrases, as: :phrase, locals: { place: @place } %>
+    </div>
+  <% end %>
+  <h2>Key phrases</h2>
+  <p class="text-muted">A conversation from walking in to leaving, for ordering here.</p>
+  <%# Phrases generated in the background arrive here from PlacePhrasesJob %>
+  <%= turbo_stream_from @place, :phrases %>
+  <%= render "places/phrases", place: @place, generating: @generating_phrases %>
 </div>

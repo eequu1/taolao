@@ -26,6 +26,7 @@ heard_phrase:
   japanese: 袋はご利用ですか？
   romaji: Fukuro wa goriyou desu ka?
   source: heard
+  speaker: staff
 
 manual_phrase:
   visit: cafe_ready
@@ -33,3 +34,18 @@ manual_phrase:
   japanese: この席空いていますか？
   romaji: Kono seki aite imasu ka?
   source: manual
+
+earlier_cafe_phrase:
+  visit: cafe_earlier
+  english: Could I have a receipt?
+  japanese: レシートをください
+  romaji: Reshiito o kudasai
+  source: heard
+  speaker: staff
+
+# Same Japanese as the cafe's key phrase cafe_order: shown once
+earlier_cafe_duplicate:
+  visit: cafe_earlier
+  english: A latte, please
+  japanese: ラテをください
+  romaji: Rate o kudasai

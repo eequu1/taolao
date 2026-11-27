@@ -23,6 +23,10 @@ class PlacesController < ApplicationController
 
   def show
     @place = Place.find(params[:id])
+    # First view: phrases are generated in the background and pushed to the page when ready
+    @place.generate_phrases_later
+    @generating_phrases = @place.phrases_generating?
+    @my_phrases = my_phrases_here
   end
 
   def create
@@ -39,6 +43,13 @@ class PlacesController < ApplicationController
   end
 
   private
+
+  # The user's own phrases from their visits here, minus any already in the key phrases (exact Japanese match)
+  def my_phrases_here
+    shown = @place.place_phrases.to_set(&:japanese)
+    Phrase.for_user_at(current_user, @place).order(:created_at).to_a
+          .select { |phrase| phrase.japanese.blank? || shown.add?(phrase.japanese) }
+  end
 
   # A place query that geocodes wins. A query that doesn't geocode is reported and ignored, so the map stays
   # on the user's location (user_lat/user_lng, set by the Stimulus controller and kept by the search form).

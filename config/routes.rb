@@ -16,6 +16,8 @@ Rails.application.routes.draw do
     member do
       get :review
       get :phrase_suggestions # lazy-loaded into the review page
+      patch :ready            # "I'm ready!": practice page -> listening page
+      patch :complete         # "Interaction over": listening page -> review
     end
   end
 

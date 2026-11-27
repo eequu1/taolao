@@ -13,3 +13,12 @@ other_users_visit:
   user: other_traveller
   place: konbini
   status: ready
+
+# An earlier, reviewed trip to the cafe: its phrases show on the cafe page and review list
+cafe_earlier:
+  user: traveller
+  place: cafe
+  status: completed
+  self_rating: 4
+  confidence: 4
+  experience_awarded: 80

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_26_040358) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_27_050642) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -21,6 +21,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_26_040358) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "purpose", default: 0, null: false
+    t.text "translation"
     t.index ["visit_id"], name: "index_messages_on_visit_id"
   end
 
@@ -35,7 +36,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_26_040358) do
     t.integer "source", default: 0, null: false
     t.integer "status", default: 0, null: false
     t.datetime "memorized_at"
+    t.integer "speaker", default: 0, null: false
     t.index ["visit_id"], name: "index_phrases_on_visit_id"
+  end
+
+  create_table "place_phrases", force: :cascade do |t|
+    t.bigint "place_id", null: false
+    t.integer "position", null: false
+    t.integer "stage", null: false
+    t.integer "speaker", default: 0, null: false
+    t.string "japanese", null: false
+    t.string "romaji", null: false
+    t.string "english", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["place_id", "position"], name: "index_place_phrases_on_place_id_and_position", unique: true
+    t.index ["place_id"], name: "index_place_phrases_on_place_id"
   end
 
   create_table "places", force: :cascade do |t|
@@ -50,6 +66,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_26_040358) do
     t.string "category"
     t.string "google_place_id"
     t.string "address"
+    t.datetime "phrases_generating_since"
   end
 
   create_table "solid_cable_messages", force: :cascade do |t|
@@ -241,6 +258,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_26_040358) do
 
   add_foreign_key "messages", "visits"
   add_foreign_key "phrases", "visits"
+  add_foreign_key "place_phrases", "places"
   add_foreign_key "solid_queue_batch_executions", "solid_queue_batches", column: "batch_id", on_delete: :cascade
   add_foreign_key "solid_queue_batch_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_blocked_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade

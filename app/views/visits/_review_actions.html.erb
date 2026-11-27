@@ -1,0 +1,13 @@
+<%# Bottom of the review page. Locals: visit %>
+<section id="review-actions" class="mb-5">
+  <% if visit.reviewed? %>
+    <p class="text-center fs-5 mb-3">
+      <i class="fa-solid fa-circle-check text-warning"></i> Visit saved: +<%= visit.experience_awarded %> XP
+    </p>
+    <%= link_to "Back to #{visit.place.name}", place_path(visit.place), class: "btn btn-warning btn-lg w-100" %>
+  <% else %>
+    <%# Outside the rating form (the chat form sits in between), so it points at it by id %>
+    <%= button_tag "Save my visit", type: :submit, form: "review-form", class: "btn btn-warning btn-lg w-100",
+                                    data: { turbo_submits_with: "Saving…" } %>
+  <% end %>
+</section>

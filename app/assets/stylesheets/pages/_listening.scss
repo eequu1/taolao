@@ -1,0 +1,25 @@
+.listening {
+  min-height: 100vh;
+  background-color: #111;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 16px;
+
+  .listening-text {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin: 0;
+  }
+
+  .listening-form {
+    max-width: 480px;
+    width: 100%;
+    margin: 0 auto;
+  }
+}

@@ -23,7 +23,7 @@ class RecordPhraseTool < RubyLLM::Tool
     # Exact match only: no case-folding of AI text (see CLAUDE.md, Ruby 3.3.5 constraint)
     return "Already on the traveller's study list." if @visit.phrases.exists?(japanese: japanese)
 
-    @recorded << @visit.phrases.create!(source: :heard, japanese: japanese,
+    @recorded << @visit.phrases.create!(source: :heard, speaker: :staff, japanese: japanese,
                                         romaji: romaji.to_s.strip, english: english.to_s.strip)
     "Saved to the traveller's study list."
   rescue ActiveRecord::RecordInvalid => e

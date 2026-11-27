@@ -7,7 +7,7 @@
 
 <div class="xp-card mb-4">
   <div class="xp-earned">+<%= visit.experience_awarded %> XP</div>
-  <% phrase_xp = visit.phrase_experience(visit.phrases.prepped.where(used: true).count) %>
+  <% phrase_xp = visit.phrase_experience(visit.phrases.where(used: true).count) %>
   <div class="small text-muted">
     Going there: <%= visit.experience_awarded - phrase_xp %> XP
     · Phrases you used: <%= phrase_xp %> XP
