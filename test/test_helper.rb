@@ -2,6 +2,8 @@ ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
 require "rails/test_help"
 require "ruby_llm/test_helper" # stub_replies / tool_call: scripted AI replies, no network
+# capture_turbo_stream_broadcasts: turbo-rails only adds it once Action Cable happens to load
+require "turbo/broadcastable/test_helper"
 
 module ActiveSupport
   class TestCase
@@ -10,6 +12,8 @@ module ActiveSupport
 
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
     fixtures :all
+
+    include Turbo::Broadcastable::TestHelper
 
     # Add more helper methods to be used by all tests here...
   end

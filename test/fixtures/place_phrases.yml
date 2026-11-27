@@ -1,0 +1,18 @@
+# The cafe already has its starter conversation; the konbini has none (first view generates it)
+cafe_greeting:
+  place: cafe
+  position: 1
+  stage: arriving
+  speaker: staff
+  japanese: いらっしゃいませ
+  romaji: Irasshaimase
+  english: Welcome
+
+cafe_order:
+  place: cafe
+  position: 2
+  stage: ordering
+  speaker: customer
+  japanese: ラテをください
+  romaji: Rate o kudasai
+  english: A latte, please

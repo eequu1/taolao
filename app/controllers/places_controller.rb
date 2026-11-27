@@ -23,6 +23,9 @@ class PlacesController < ApplicationController
 
   def show
     @place = Place.find(params[:id])
+    # First view: phrases are generated in the background and pushed to the page when ready
+    @place.generate_phrases_later
+    @generating_phrases = @place.phrases_generating?
   end
 
   def create
