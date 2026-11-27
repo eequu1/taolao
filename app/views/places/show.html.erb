@@ -9,6 +9,7 @@
       <span class="badge rounded-pill text-bg-warning"> Minimum Level:<%= @place.minimum_level %></span>
     </div>
   </div>
+  <%= button_to "Create a Visit", place_visits_path(@place), class:"btn btn-primary my-2 mb-4" %>
   <% if @my_phrases.any? %>
     <h2 class="mt-4">Your phrases</h2>
     <p class="text-muted">Phrases you added on your visits here. Only you can see these.</p>
@@ -16,7 +17,6 @@
       <%= render partial: "places/phrase_card", collection: @my_phrases, as: :phrase, locals: { place: @place } %>
     </div>
   <% end %>
-  <%= button_to "Create a Visit", place_visits_path(@place), class:"btn btn-primary my-2 mb-4" %>
   <h2>Key phrases</h2>
   <p class="text-muted">A conversation from walking in to leaving, for ordering here.</p>
   <%# Phrases generated in the background arrive here from PlacePhrasesJob %>

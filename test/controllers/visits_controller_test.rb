@@ -49,6 +49,38 @@ class VisitsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 0, @user.reload.experience
   end
 
+  test "the save button sits at the bottom, under the chat, and submits the rating form" do
+    get review_visit_path(@visit)
+    assert_select "form#review-form[action='#{visit_path(@visit)}']"
+    assert_select "form#review-form button[type=submit]", 0
+    assert_select "#chat ~ #review-actions button[type=submit][form='review-form']", text: "Save my visit"
+  end
+
+  test "submitting with Turbo swaps only the form and the save button" do
+    patch visit_path(@visit), params: { visit: { self_rating: 5, confidence: 5 } }, as: :turbo_stream
+
+    assert_response :success
+    assert @visit.reload.completed?
+    assert_select "turbo-stream[action='update'][target='rating'] .xp-earned", text: /\+20 XP/
+    assert_select "turbo-stream[action='replace'][target='review-actions'] a[href='#{place_path(@visit.place)}']"
+    assert_select "turbo-stream[target='phrase-suggestions']", 0
+  end
+
+  test "an incomplete Turbo submission shows the form again with its errors" do
+    patch visit_path(@visit), params: { visit: { confidence: 5 } }, as: :turbo_stream
+
+    assert_response :unprocessable_entity
+    assert_select "turbo-stream[target='rating'] form#review-form", text: /choose a number from 1 to 5/
+    assert_select "turbo-stream[target='review-actions'] button[form='review-form']"
+  end
+
+  test "a reviewed visit's page links back to the place" do
+    @visit.complete_review!(self_rating: 4, confidence: 4)
+    get review_visit_path(@visit)
+    assert_select "#review-actions a[href='#{place_path(@visit.place)}']", text: /Back to Test Konbini/
+    assert_select "#review-actions button", 0
+  end
+
   test "the review page shows earlier chat messages" do
     @visit.messages.create!(purpose: :review, role: "assistant", content: "What was the staff member holding?")
     @visit.messages.create!(purpose: :prep, role: "assistant", content: "Prep chat message")

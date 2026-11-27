@@ -4,13 +4,9 @@
   <h2 class="mb-1">You went to <%= @visit.place.name %>!</h2>
 
   <%# 1. How it went: the form, or the XP it earned once submitted %>
+  <%# Replaced by update.turbo_stream.erb on submit, so the rest of the page stays as it is %>
   <section id="rating" class="mb-5">
-    <% if @visit.reviewed? %>
-      <%= render "xp_card", visit: @visit, user: current_user %>
-    <% else %>
-      <p class="text-muted mb-4">Every real visit earns XP, even the rough ones.</p>
-      <%= render "review_form", visit: @visit %>
-    <% end %>
+    <%= render "rating", visit: @visit, user: current_user %>
   </section>
 
   <%# 2. Staff phrases they may have heard (AI, loaded after the page) %>
@@ -33,4 +29,7 @@
     </div>
     <%= render "review_messages/form", visit: @visit %>
   </section>
+
+  <%# 4. "Save my visit" (submits the rating form above), then a way back to the place %>
+  <%= render "review_actions", visit: @visit %>
 </div>

@@ -47,12 +47,9 @@ class VisitsController < ApplicationController
       confidence: review_params[:confidence].to_i,
       used_phrase_ids: used_phrase_ids, used_place_phrase_ids: used_place_phrase_ids
     )
-    flash[:levels_gained] = levels_gained if levels_gained.positive?
-    # Back to the review page, where the form becomes the XP card and the chat stays available
-    redirect_to review_visit_path(@visit)
+    review_saved(levels_gained)
   rescue ActiveRecord::RecordInvalid
-    @messages = @visit.messages.review.order(:id)
-    render :review, status: :unprocessable_entity
+    review_invalid
   end
 
   # Turbo Frame content for the review page; slow (AI call) so it loads after the page
@@ -63,6 +60,31 @@ class VisitsController < ApplicationController
   end
 
   private
+
+  # Turbo: swap only the form and the save button (update.turbo_stream.erb), so the
+  # suggestions don't load again. Without Turbo: back to the review page.
+  def review_saved(levels_gained)
+    respond_to do |format|
+      format.turbo_stream do
+        flash.now[:levels_gained] = levels_gained if levels_gained.positive?
+        render :update
+      end
+      format.html do
+        flash[:levels_gained] = levels_gained if levels_gained.positive?
+        redirect_to review_visit_path(@visit)
+      end
+    end
+  end
+
+  def review_invalid
+    respond_to do |format|
+      format.turbo_stream { render :update, status: :unprocessable_entity }
+      format.html do
+        @messages = @visit.messages.review.order(:id)
+        render :review, status: :unprocessable_entity
+      end
+    end
+  end
 
   # Scoped to the signed-in user, so other people's visits are a 404.
   def set_visit

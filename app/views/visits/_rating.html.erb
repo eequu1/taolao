@@ -1,0 +1,7 @@
+<%# The rating form, or the XP card once the visit is reviewed. Locals: visit, user %>
+<% if visit.reviewed? %>
+  <%= render "xp_card", visit: visit, user: user %>
+<% else %>
+  <p class="text-muted mb-4">Every real visit earns XP, even the rough ones.</p>
+  <%= render "review_form", visit: visit %>
+<% end %>
