@@ -5,21 +5,7 @@
   <% if phrases.any? %>
     <% phrases.group_by(&:stage).each do |stage, stage_phrases| %>
       <h5 class="phrase-stage"><%= PlacePhrase::STAGE_LABELS[stage] %></h5>
-      <% stage_phrases.each do |phrase| %>
-        <div class="phrase-card <%= "staff-line" if phrase.staff? %>">
-          <div class="phrase-text">
-            <div class="speaker"><%= phrase.staff? ? "Staff may say" : "You can say" %></div>
-            <div class="japanese"><%= phrase.japanese %></div>
-            <div class="romaji"><%= phrase.romaji %></div>
-            <div class="english"><%= phrase.english %></div>
-          </div>
-          <div class="play-btn" data-controller="tts" data-tts-text-value="<%= phrase.japanese %>"
-               data-tts-url-value="<%= speak_place_path(place) %>" data-action="click->tts#play"
-               style="cursor: pointer;">
-            <i class="fa-regular fa-circle-play"></i>
-          </div>
-        </div>
-      <% end %>
+      <%= render partial: "places/phrase_card", collection: stage_phrases, as: :phrase, locals: { place: place } %>
     <% end %>
   <% elsif generating %>
     <%# Same as the review page's "Finding common phrases…" placeholder %>

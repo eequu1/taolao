@@ -37,6 +37,7 @@ class PhraseFinderChatTest < ActiveSupport::TestCase
     phrase = result.phrases.sole
     assert_equal "ポイントカードはお持ちですか？", phrase.japanese
     assert phrase.learning?
+    assert phrase.staff?
     assert_equal @visit.place, phrase.visit.place
   end
 

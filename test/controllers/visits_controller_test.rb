@@ -58,6 +58,16 @@ class VisitsControllerTest < ActionDispatch::IntegrationTest
     assert_select ".chat-bubble", text: /Prep chat message/, count: 0
   end
 
+  test "the review list scrolls and includes the place's key phrases, which can be ticked" do
+    visit = visits(:cafe_ready)
+    get review_visit_path(visit)
+    assert_select ".phrase-choices input[name='visit[used_place_phrase_ids][]'][value='#{place_phrases(:cafe_greeting).id}']"
+
+    patch visit_path(visit), params: { visit: { self_rating: 5, confidence: 5,
+                                                used_place_phrase_ids: [place_phrases(:cafe_greeting).id] } }
+    assert visit.phrases.find_by(japanese: "いらっしゃいませ").used?
+  end
+
   test "phrase suggestions come from the AI with Add buttons" do
     stub_replies({ phrases: [{ japanese: "温めますか？", romaji: "Atatamemasu ka?", english: "Shall I heat it up?" },
                              { japanese: "フレーズ0", romaji: "Fureezu 0", english: "Phrase 0" }] }.to_json)

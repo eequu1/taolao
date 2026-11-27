@@ -1,0 +1,16 @@
+<%# One phrase with its speaker and a play button. Locals: phrase (PlacePhrase or Phrase), place %>
+<div class="phrase-card <%= "staff-line" if phrase.staff? %>">
+  <div class="phrase-text">
+    <div class="speaker"><%= phrase.staff? ? "Staff may say" : "You can say" %></div>
+    <% if phrase.japanese.present? %><div class="japanese"><%= phrase.japanese %></div><% end %>
+    <% if phrase.romaji.present? %><div class="romaji"><%= phrase.romaji %></div><% end %>
+    <% if phrase.english.present? %><div class="english"><%= phrase.english %></div><% end %>
+  </div>
+  <% if phrase.japanese.present? %>
+    <div class="play-btn" data-controller="tts" data-tts-text-value="<%= phrase.japanese %>"
+         data-tts-url-value="<%= speak_place_path(place) %>" data-action="click->tts#play"
+         style="cursor: pointer;">
+      <i class="fa-regular fa-circle-play"></i>
+    </div>
+  <% end %>
+</div>

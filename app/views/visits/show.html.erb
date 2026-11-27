@@ -34,12 +34,12 @@
     <h2 class="mb-3"><%= @visit.place.name %></h2>
     <% if @visit.reviewed? %>
       <%= render "xp_card", visit: @visit, user: current_user %>
-      <% used = @visit.phrases.prepped.where(used: true) %>
+      <% used = @visit.phrases.where(used: true).order(:created_at) %>
       <% if used.any? %>
         <h4>Phrases you used</h4>
         <%= render partial: "phrases/phrase", collection: used, as: :phrase %>
       <% end %>
-      <% heard = @visit.phrases.where(source: %i[heard manual]).order(:created_at) %>
+      <% heard = @visit.phrases.where(source: %i[heard manual], used: false).order(:created_at) %>
       <% if heard.any? %>
         <h4 class="mt-4">Phrases you heard</h4>
         <%= render partial: "phrases/phrase", collection: heard, as: :phrase %>

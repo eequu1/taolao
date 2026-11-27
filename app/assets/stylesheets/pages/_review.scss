@@ -23,6 +23,23 @@
 
   .btn-check:focus-visible + .phrase-choice {
     outline: 3px solid $blue;
+    outline-offset: -3px; // stays visible inside the scroll box
+  }
+
+  // Every phrase for the place can be a long list: scroll it instead of the page
+  .phrase-choices {
+    max-height: 55vh;
+    overflow-y: auto;
+    padding: 4px;
+    border: 1px solid $light-gray;
+    border-radius: 12px;
+  }
+
+  .phrase-choice .speaker {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: grey;
+    margin-bottom: 2px;
   }
 }
 

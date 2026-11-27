@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_27_042806) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_27_050642) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -36,6 +36,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_27_042806) do
     t.integer "source", default: 0, null: false
     t.integer "status", default: 0, null: false
     t.datetime "memorized_at"
+    t.integer "speaker", default: 0, null: false
     t.index ["visit_id"], name: "index_phrases_on_visit_id"
   end
 

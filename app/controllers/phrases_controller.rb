@@ -27,7 +27,8 @@ class PhrasesController < ApplicationController
     phrase = @visit.phrases.find_or_initialize_by(japanese: phrase_params[:japanese].to_s.strip)
     return phrase if phrase.persisted?
 
-    phrase.assign_attributes(source: :heard, romaji: phrase_params[:romaji], english: phrase_params[:english])
+    phrase.assign_attributes(source: :heard, speaker: :staff,
+                             romaji: phrase_params[:romaji], english: phrase_params[:english])
     phrase
   end
 

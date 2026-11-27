@@ -25,3 +25,24 @@ class PlacesControllerTest < ActionDispatch::IntegrationTest
     assert_select ".phrases-generating", 0
   end
 end
+
+class PlacesControllerYourPhrasesTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+
+  test "the place page lists the user's own phrases from visits there, skipping key phrases" do
+    sign_in users(:traveller)
+    get place_path(places(:cafe))
+
+    assert_select "h2", text: "Your phrases"
+    assert_select ".phrase-card.staff-line .japanese", text: "レシートをください"
+    assert_select ".phrase-card .japanese", text: "ラテをください", count: 1 # already a key phrase
+  end
+
+  test "other users don't see someone's phrases" do
+    sign_in users(:other_traveller)
+    get place_path(places(:cafe))
+
+    assert_select "h2", text: "Your phrases", count: 0
+    assert_select ".japanese", text: "レシートをください", count: 0
+  end
+end

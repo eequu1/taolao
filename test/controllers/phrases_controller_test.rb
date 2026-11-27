@@ -19,6 +19,7 @@ class PhrasesControllerTest < ActionDispatch::IntegrationTest
       post visit_phrases_path(@visit), params: add_params
     end
     assert @visit.phrases.last.learning?
+    assert @visit.phrases.last.staff? # suggestions are things staff say
     assert_redirected_to review_visit_path(@visit)
   end
 
