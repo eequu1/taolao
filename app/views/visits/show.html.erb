@@ -6,13 +6,10 @@
     <%# Orange chat area %>
     <div class="practice-chat" id="practice-messages">
       <%# The staff greeting: always the first bubble %>
-      <div class="bubble-row staff">
-        <div class="avatar"><i class="fa-solid fa-user-tie"></i></div>
-        <div class="bubble">
-          <p class="japanese">いらっしゃいませ。ご注文は？</p>
-          <p class="english">Welcome, what would you like?</p>
-        </div>
-      </div>
+      <%# No messages yet: the AI is writing the first line %>
+      <% if @messages.empty? %>
+        <%= render "messages/typing" %>
+      <% end %>>
       <%# One bubble per message %>
       <% @messages.each do |message| %>
         <%= render "messages/message", message: message %>

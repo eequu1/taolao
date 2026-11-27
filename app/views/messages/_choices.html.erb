@@ -1,7 +1,7 @@
 <% choices.each do |choice| %>
-  <%= button_to visit_messages_path(visit), params: { content: choice[:japanese], translation: choice[:english] }, class: "choice" do %>
-    <p class="japanese"><%= choice[:japanese] %></p>
-    <p class="romaji"><%= choice[:romaji] %></p>
-    <p class="english"><%= choice[:english] %></p>
+  <%= button_to visit_messages_path(visit), params: { content: choice["japanese"], translation: choice["english"] }, class: "choice" do %>
+    <p class="japanese"><%= choice["japanese"] %></p>
+    <p class="romaji"><%= choice["romaji"] %></p>
+    <p class="english"><%= choice["english"] %></p>
   <% end %>
 <% end %>
