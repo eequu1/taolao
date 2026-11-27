@@ -4,6 +4,7 @@ konbini:
   lat: 35.66
   long: 139.70
   minimum_level: 2
+  image_url: https://example.com/place.jpg
 
 cafe:
   name: Test Cafe
@@ -11,3 +12,4 @@ cafe:
   lat: 35.67
   long: 139.71
   minimum_level: 10
+  image_url: https://example.com/place.jpg

@@ -1,0 +1,4 @@
+<%# Submitting the review: swap the form for the XP card (or the form with its errors) %>
+<%# and the save button for the way back, leaving the suggestions and chat untouched. %>
+<%= turbo_stream.update "rating", partial: "visits/rating", locals: { visit: @visit, user: current_user } %>
+<%= turbo_stream.replace "review-actions", partial: "visits/review_actions", locals: { visit: @visit } %>

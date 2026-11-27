@@ -1,5 +1,6 @@
 <%# How did it go / confidence / phrases used. Locals: visit %>
-<%= simple_form_for visit, url: visit_path(visit), method: :patch do |f| %>
+<%# Submitted by the "Save my visit" button at the bottom of the page (_review_actions) %>
+<%= simple_form_for visit, url: visit_path(visit), method: :patch, html: { id: "review-form" } do |f| %>
   <%= render "rating_scale", f: f, field: :self_rating, question: "How did it go?",
                              low: "Rough", high: "Great" %>
   <%= render "rating_scale", f: f, field: :confidence, question: "How confident did you feel?",
@@ -7,27 +8,37 @@
 
   <fieldset class="mb-4">
     <legend class="fs-5">Which phrases did you use?</legend>
-    <%# Empty value so the key is always sent, even with nothing ticked %>
+    <p class="small text-muted">Your phrases and this place's key phrases. Tick any you said.</p>
+    <%# Empty values so the keys are always sent, even with nothing ticked %>
     <%= hidden_field_tag "visit[used_phrase_ids][]", "" %>
-    <% phrases = visit.phrases.prepped %>
-    <% if phrases.any? %>
-      <% phrases.each do |phrase| %>
-        <% checked = Array(@used_phrase_ids).include?(phrase.id) || phrase.used? %>
-        <%= check_box_tag "visit[used_phrase_ids][]", phrase.id, checked,
-                          id: "phrase_#{phrase.id}", class: "btn-check" %>
-        <label for="phrase_<%= phrase.id %>" class="phrase-card phrase-choice">
-          <div class="phrase-text">
-            <div class="japanese"><%= phrase.japanese %></div>
-            <div class="romaji"><%= phrase.romaji %></div>
-            <div class="english"><%= phrase.english %></div>
-          </div>
-          <i class="fa-solid fa-circle-check check-icon"></i>
-        </label>
-      <% end %>
+    <%= hidden_field_tag "visit[used_place_phrase_ids][]", "" %>
+    <% choices = visit.review_phrase_choices %>
+    <% if choices.any? %>
+      <div class="phrase-choices">
+        <% choices.each do |phrase| %>
+          <%# Phrase (the user's own) or PlacePhrase (the place's starter list): separate id lists %>
+          <% if phrase.is_a?(PlacePhrase) %>
+            <% field, dom_id, checked = "used_place_phrase_ids", "place_phrase_#{phrase.id}",
+                                        Array(@used_place_phrase_ids).include?(phrase.id) %>
+          <% else %>
+            <% field, dom_id = "used_phrase_ids", "phrase_#{phrase.id}" %>
+            <% checked = Array(@used_phrase_ids).include?(phrase.id) || (phrase.visit_id == visit.id && phrase.used?) %>
+          <% end %>
+          <%= check_box_tag "visit[#{field}][]", phrase.id, checked, id: dom_id, class: "btn-check" %>
+          <label for="<%= dom_id %>" class="phrase-card phrase-choice">
+            <div class="phrase-text">
+              <div class="speaker"><%= phrase.staff? ? "Staff line" : "Your line" %></div>
+              <% if phrase.japanese.present? %><div class="japanese"><%= phrase.japanese %></div><% end %>
+              <% if phrase.romaji.present? %><div class="romaji"><%= phrase.romaji %></div><% end %>
+              <% if phrase.english.present? %><div class="english"><%= phrase.english %></div><% end %>
+            </div>
+            <i class="fa-solid fa-circle-check check-icon"></i>
+          </label>
+        <% end %>
+      </div>
     <% else %>
-      <p class="text-muted">No phrases were prepped for this visit.</p>
+      <p class="text-muted">No phrases for this place yet.</p>
     <% end %>
   </fieldset>
 
-  <%= f.button :submit, "Save my visit", class: "btn btn-warning btn-lg w-100" %>
 <% end %>

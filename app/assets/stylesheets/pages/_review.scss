@@ -23,6 +23,27 @@
 
   .btn-check:focus-visible + .phrase-choice {
     outline: 3px solid $blue;
+    outline-offset: -3px; // stays visible inside the scroll box
+  }
+
+  // Every phrase for the place can be a long list: scroll it instead of the page
+  .phrase-choices {
+    // Bootstrap hides .btn-check with position: absolute; without this its containing block is
+    // outside the scroll box, so the checkbox doesn't scroll with its card and focusing it
+    // (clicking the card) scrolls the page to where it really is
+    position: relative;
+    max-height: 55vh;
+    overflow-y: auto;
+    padding: 4px;
+    border: 1px solid $light-gray;
+    border-radius: 12px;
+  }
+
+  .phrase-choice .speaker {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: grey;
+    margin-bottom: 2px;
   }
 }
 

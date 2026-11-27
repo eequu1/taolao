@@ -4,6 +4,10 @@ class Phrase < ApplicationRecord
 
   enum :source, { prepped: 0, heard: 1, manual: 2 }
   enum :status, { learning: 0, memorized: 1 }
+  enum :speaker, { customer: 0, staff: 1 } # heard phrases are staff lines
+
+  # A user's own phrases from all their visits to a place: private to them
+  scope :for_user_at, ->(user, place) { joins(:visit).where(visits: { user_id: user.id, place_id: place.id }) }
 
   MEMORIZE_XP_PER_LEVEL = 5
 
