@@ -35,24 +35,25 @@ class PracticeMessageJob < ApplicationJob
     broadcast_remove_typing
     Turbo::StreamsChannel.broadcast_append_to(
       [@visit, :practice_chat], target: "practice-messages",
-      partial: "messages/message", locals: { message: assistant_message }
+                                partial: "messages/message", locals: { message: assistant_message }
     )
     Turbo::StreamsChannel.broadcast_update_to(
       [@visit, :practice_chat], target: "practice-choices",
-      partial: "messages/choices", locals: { visit: @visit, choices: choices }
+                                partial: "messages/choices", locals: { visit: @visit, choices: choices }
     )
   rescue JSON::ParserError, RubyLLM::Error
     broadcast_remove_typing
     Turbo::StreamsChannel.broadcast_update_to(
       [@visit, :practice_chat], target: "practice-choices",
-      html: "<p>The AI couldn't answer. Please reload the page and try again.</p>"
+                                html: "<p>The AI couldn't answer. Please reload the page and try again.</p>"
     )
   end
 
   private
 
   def instructions
-    "#{SYSTEM_PROMPT}\nThe shop: #{@visit.place.name}. #{@visit.place.description}"
+    category = Place::CATEGORIES[@visit.place.category] || @visit.place.category
+    "#{SYSTEM_PROMPT}\nThe shop: #{@visit.place.name} (#{category}). #{@visit.place.description}"
   end
 
   def build_conversation_history

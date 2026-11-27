@@ -12,7 +12,7 @@ class VisitsController < ApplicationController
     @messages = @visit.messages.prep.order(:id)
     # Before the AI has answered: replies to the greeting
     default_choices = [
-      { japanese: "コーヒーを一つください。", romaji: "Koohii o hitotsu kudasai.", english: "One coffee, please." },
+      { japanese: "すみません。", romaji: "Sumimasen.", english: "Excuse me." },
       { japanese: "おすすめは何ですか？", romaji: "Osusume wa nan desu ka?", english: "What do you recommend?" },
       { japanese: "メニューを見せてください。", romaji: "Menyuu o misete kudasai.", english: "Can I see the menu, please?" }
     ]
