@@ -1,18 +1,16 @@
 <div class="map-popup place-card">
   <div class="place-card-info">
     <%= image_tag( place.image_url.presence || "placeholder.png", alt: place.name ) %>
-
     <div class="place-details">
       <h3><%= place.name %></h3>
-
       <div class="place-badges">
         <span class="badge level">
           Minimum Level: <%= place.minimum_level %>
         </span>
       </div>
-      <p class="mission">
+      <%# <p class="mission">
         Mission: ?
-      </p>
+      </p> %>
     </div>
   </div>
   <%= link_to place_path(place) do %>

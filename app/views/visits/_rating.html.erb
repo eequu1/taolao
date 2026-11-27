@@ -2,6 +2,6 @@
 <% if visit.reviewed? %>
   <%= render "xp_card", visit: visit, user: user %>
 <% else %>
-  <p class="text-muted mb-4">Every real visit earns XP, even the rough ones.</p>
+  <p class="text-muted mb-4">Every real visit earns XP.</p>
   <%= render "review_form", visit: visit %>
 <% end %>
