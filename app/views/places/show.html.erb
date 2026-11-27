@@ -1,14 +1,15 @@
-<div class="container">
-  <div class="backdrop">
-    <%= image_tag @place.image_url, alt: @place.name, class: "place-image" %>
-    <div class="info">
-      <div class="text-center">
-        <h4> <%= @place.name %></h4>
-        <p> <%= @place.description %></p>
-      </div>
-      <span class="badge rounded-pill text-bg-warning"> Minimum Level:<%= @place.minimum_level %></span>
+<div class="orange-session">
+  <%= image_tag @place.image_url, alt: @place.name, class: "place-image" %>
+  <div class="info">
+    <div class="text-center">
+      <h1> <%= @place.name %> </h1>
+      <p> <%= @place.description %> </p>
     </div>
+    <span class="highlight"> Minimum Level:<%= @place.minimum_level %></span>
   </div>
+</div>
+
+<div class="container">
   <h2>Your Reply</h2>
   <div class="key-phrase">
     <%# prepped only: phrases users heard after a visit are private to them %>
@@ -32,5 +33,7 @@
       </div>
     <% end %>
   </div>
-  <%= button_to "Create a Visit", place_visits_path(@place), class:"btn btn-primary my-2 mb-4" %>
+  <div class="d-flex justify-content-center">
+    <%= button_to "Create a Visit", place_visits_path(@place), class:"btn start-btn" %>
+  </div>
 </div>

@@ -1,0 +1,38 @@
+.navy-btn {
+  display: inline-block;
+  padding: 8px 20px;
+  border-radius: 20px;
+  background-color: $navy;
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba($navy, 0.3);
+  transition: all 0.25s ease;
+  user-select: none;
+
+  &:hover {
+    background-color: $light-navy;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba($navy, 0.3);
+  }
+
+  &:focus-visible {
+    outline: 3px solid $orange;
+    outline-offset: 3px;
+  }
+}
+
+.ready-btn, .start-btn {
+  --bs-btn-bg: #{$navy};
+  --bs-btn-color: white;
+  --bs-btn-hover-bg: #{darken($navy, 10%)};
+  --bs-btn-hover-color: white;
+  --bs-btn-active-bg: #{darken($navy, 15%)};
+  --bs-btn-active-color: white;
+  font-weight: 700;
+  border-radius: 8px;
+  padding: 12px;
+  margin-top: 24px;
+}

@@ -10,3 +10,11 @@
 .navbar-lewagon .navbar-brand img {
   width: 40px;
 }
+
+.navbar-brand p {
+  display: inline-block;
+}
+
+.navbar-brand span {
+  color: $navy;
+}

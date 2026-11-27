@@ -1,1 +1,118 @@
-// Specific CSS for your home-page
+body {
+  background: $cream;
+}
+
+.orange-session {
+  background-color: $orange;
+  width: 100%;
+  padding: 12px 32px;
+
+  h1 {
+    margin: 1rem 0 0.5rem;
+    color: $navy;
+  }
+
+  p {
+    margin: 0.25rem 0;
+  }
+}
+
+.grid-section {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 1.5rem;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  max-width: 800px;
+
+  .bubble {
+    position: relative;
+    background: #fff;
+    border-radius: 18px;
+    padding: 1.4rem 1.8rem;
+    box-shadow: 0 8px 24px rgba($navy, 0.14);
+
+    h3 {
+      font-size: 1.6rem;
+      margin: 0 0 0.6rem;
+      line-height: 1.3;
+      color: $navy;
+    }
+
+    p {
+      margin: 0.35rem 0;
+      font-size: 1rem;
+      line-height: 1.45;
+    }
+
+    .romaji {
+      color: $light-navy;
+    }
+  }
+
+  img {
+    display: block;
+    width: 100px;
+    height: auto;
+    max-width: 100px;
+    object-fit: contain;
+  }
+}
+
+.wave {
+  background: $orange;
+  line-height: 0;
+
+  svg {
+    display: block;
+    width: 100%;
+    height: 48px;
+  }
+
+  path {
+    fill: $cream;
+  }
+}
+
+.cta-section {
+  background: $cream;
+  padding: 0.5rem 3.5rem 3rem;
+
+  h1 {
+    margin: 0 0 0.5rem;
+  }
+
+  p {
+    margin: 0 0 1.5rem;
+  }
+}
+
+// Mobile
+@media (max-width: 600px) {
+  .orange-session,
+  .cta-section {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  .wave svg {
+    height: 32px;
+  }
+
+  .grid-section {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+    gap: 1rem;
+
+    .bubble {
+      max-width: 100%;
+    }
+
+    img {
+      width: 75px;
+      max-width: 75px;
+    }
+  }
+}

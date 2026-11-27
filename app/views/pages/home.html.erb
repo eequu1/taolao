@@ -1,2 +1,26 @@
-<h1>Pages#home</h1>
-<p>Find me in app/views/pages/home.html.erb</p>
+<div class="orange-session">
+  <h1>おかえりなさい！</h1>
+  <p>Ready to practice Japanese?</p>
+  <p>A little conversation every day makes a big difference.</p>
+
+  <div class="grid-section">
+    <div class="bubble">
+      <h3>今日は何について話そうか？</h3>
+      <p class="romaji">Kyou wa nani ni tsuite hanasou ka?</p>
+      <p>“What shall we talk about today?”</p>
+    </div>
+    <%= image_tag "Hana-logo.png" %>
+  </div>
+</div>
+
+<div class="wave" aria-hidden="true">
+  <svg viewBox="0 0 1440 48" preserveAspectRatio="none">
+    <path d="M0 48V20C240 0 480 44 720 24S1200 40 1440 16V48Z"/>
+  </svg>
+</div>
+
+<div class="cta-section">
+  <h1>Let's talk in Japanese!</h1>
+  <p>Practice naturally with your AI conversation partner. Friendly, patient, and zero pressure.</p>
+  <%= link_to "Let's start", places_path, class: "navy-btn" %>
+</div>

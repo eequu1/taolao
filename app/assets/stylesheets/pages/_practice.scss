@@ -1,20 +1,13 @@
-$practice-orange: #FFA62B;
-$practice-navy: #344A8F;
-
-
 .practice {
-  max-width: 480px;
   margin:0 auto;
-  background-color: white;
   min-height: 100vh;
 
   p{
     margin: 0;
   }
 
-
   .practice-chat{
-    background-color: $practice-orange ;
+    background-color: $orange ;
     padding: 24px 16px;
     min-height: 300px;
     display: flex;
@@ -35,7 +28,7 @@ $practice-navy: #344A8F;
       justify-content: flex-end ;
 
       .bubble {
-        background-color: $practice-navy;
+        background-color: $navy;
         color: white;
       }
     }
@@ -46,7 +39,7 @@ $practice-navy: #344A8F;
     height: 32px;
     border-radius: 50%;
     background-color: white;
-    color: $practice-navy;
+    color: $navy;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -63,10 +56,10 @@ $practice-navy: #344A8F;
   .japanese {
     font-weight: 700;
   }
+
   .english {
     font-size: 13px;
   }
-
 
   .choice {
     text-align: left;
@@ -92,25 +85,11 @@ $practice-navy: #344A8F;
     }
 
   }
+
   .practice-bottom {
     padding: 16px;
     display: flex;
     flex-direction: column;
     gap: 12px;
   }
-
-
-  .ready-btn {
-    --bs-btn-bg: #{$practice-navy};
-    --bs-btn-color: white;
-    --bs-btn-hover-bg: #{darken($practice-navy, 10%)};
-    --bs-btn-hover-color: white;
-    --bs-btn-active-bg: #{darken($practice-navy, 15%)};
-    --bs-btn-active-color: white;
-    font-weight: 700;
-    border-radius: 8px;
-    padding: 12px;
-    margin-top: 24px;
-
-    }
-  }
+}
