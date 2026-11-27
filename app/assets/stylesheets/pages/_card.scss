@@ -8,32 +8,28 @@
  justify-content: space-between;
  align-items: center;
 
+  .japanese {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 3px;
+  }
+  .romaji{
+    font-size: 14px;
+    color: grey;
+    margin-bottom: 3px;
+  }
+  .english{
+    font-size: 14px;
+  }
 
- .japanese {
-   font-size: 16px;
-   font-weight: bold;
-   margin-bottom: 3px;
- }
- .romaji{
-   font-size: 14px;
-   color: grey;
-   margin-bottom: 3px;
- }
- .english{
-   font-size: 14px;
- }
-
-
- .play-btn{
- color: $orange;
- width: 34px;
- font-size: 40px;
- flex-shrink: 0;
-}
-
+  .play-btn {
+    color: $orange;
+    width: 34px;
+    font-size: 40px;
+    flex-shrink: 0;
+  }
 
 }
-
 
 .backdrop{
  background-color: $orange;
@@ -43,7 +39,6 @@
  align-items: center;
 }
 
-
 .place-image {
  height: 200px;
  width: 100%;
@@ -52,32 +47,18 @@
  margin-bottom: 15px;
 }
 
-
 .info {
  background-color: white;
  padding: 8px;
  border-radius: 25px;
 
-
- h4{
-   color: black;
- }
-
-
- p{
-   color: grey;
- }
-
-
- h5{
-   background-color: $orange;
-   border-radius: 50;
- }
+  h5{
+    background-color: $orange;
+    border-radius: 50;
+  }
 }
 
-
 // Place card in /places page
-
 
 .place-card {
  background: white;
@@ -87,7 +68,6 @@
  padding: 20px;
  margin: 12px 0;
  width: 100%;
-
 
  .place-card-info {
    display: flex;
@@ -105,38 +85,23 @@
    }
  }
 
-
  .place-details {
    flex: 1;
    min-width: 0;
    overflow-wrap: break-word;
  }
 
-
  .place-badges {
    display: flex;
    flex-wrap: wrap;
    gap: 8px;
    margin: 6px 0;
-
-
-   .badge {
-     background-color: $yellow;
-     color: white;
-     border-radius: 20px;
-     padding: 4px 14px;
-     font-size: 1rem;
-     white-space: normal;
-     overflow-wrap: anywhere;
-   }
  }
-
 
  .mission {
    font-size: 1.2rem;
    margin: 0;
  }
-
 
  .view-mission-btn {
    width: 100%;
@@ -148,7 +113,6 @@
    font-size: 1.3rem;
    cursor: pointer;
    transition: background-color 0.2s ease;
-
 
    &:hover {
      background-color: rgba($navy, 0.05);
